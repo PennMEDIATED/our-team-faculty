@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Research Network — Penn MEDIATED</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="page">
+
+  <!-- HEADER -->
+  <div id="hdr">
+    <div id="hdr-left">
+      <h1>Penn MEDIATED's Affiliated Faculty</h1>
+      <p class="hdr-desc">Our 25 affiliated faculty are distinguished by their rigorous empirical and computational research that advances the collective understanding of the information ecosystem. Explore the visualization  to see research papers that are representative of how our faculty study the media organizations, technology platforms, governments, elites, and everyday people that make up the information ecosystem.</p>
+    </div>
+    <div class="newsletter-box">
+      <h3>Center Newsletter</h3>
+      <p><a href="https://signup.e2ma.net/signup/2017639/1984707/" target="_blank" rel="noopener noreferrer">Subscribe</a> to our (occasional) newsletter for updates with the latest research, events, and announcements from the Center.</p>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- LEFT COLUMN: faculty bio (top) + paper detail (bottom) -->
+    <div id="left-col">
+      <div id="faculty-bio">
+        <div id="fb-header">
+          <img id="fb-photo" src="" alt="">
+          <div id="fb-meta">
+            <div id="fb-name-row">
+              <div id="fb-name"></div>
+              <a id="fb-website" href="#" target="_blank" rel="noopener noreferrer">Faculty Website</a>
+            </div>
+            <div id="fb-school"></div>
+          </div>
+        </div>
+        <p id="fb-bio"></p>
+      </div>
+      <div id="paper-detail">
+        <div id="pd-title"></div>
+        <p id="pd-desc"></p>
+        <a id="pd-read-btn" href="#" target="_blank" rel="noopener noreferrer">Read Paper Overview</a>
+      </div>
+    </div>
+
+    <!-- DIAGRAM -->
+    <div id="svg-area">
+      <div id="svg-wrap"></div>
+      <div id="diagram-footer">
+        <div id="diagram-callout"></div>
+        <div id="auto-cycle-msg"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div id="panel">
+      <div id="actor-card"></div>
+      <div id="panel-hint">Hover over a faculty name or the network to see relevant research.</div>
+      <div id="paper-cards"></div>
+    </div>
+
+  </div><!-- /main -->
+
+  <div id="page-bottom-spacer"></div>
+</div><!-- /page -->
+
+<script>
+(function () {
+  var W = 860, H = 590;
+
+  var ACTORS = [
+    {
+      id: 'gov',
+      label: ['Governments'],
+      color: '#4b2fc9',
+      cx: 430, cy: 80,
+      faculty: 'Coglianese, Yoo, Morse, Ness, Miller, Esberg, Albarrac\u00edn, Culhane',
+      desc: 'Regulatory bodies, courts, legislatures, and authoritarian regimes. Shape the rules of the information environment through law, licensing, and censorship.',
+      icon: '<line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/>'
+    },
+    {
+      id: 'media',
+      label: ['Digital News'],
+      color: '#1f6f4a',
+      cx: 140, cy: 295,
+      faculty: 'Watts, Levendusky, Pickard, Hall Jamieson, Hopkins, Gonz\u00e1lez-Bail\u00f3n, Freelon, Yildirim, Falk',
+      desc: 'Broadcast, cable, local, and digital news organizations. Produce and frame information that shapes public knowledge and political attitudes.',
+      icon: '<path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="12" y2="15"/>'
+    },
+    {
+      id: 'social',
+      label: ['Social Media'],
+      color: '#0f7d75',
+      cx: 370, cy: 340,
+      faculty: 'Gonz\u00e1lez-Bail\u00f3n, Freelon, Watts, Metaxa, Roth, Levendusky, Lelkes, Knox, Yoo',
+      desc: 'Platforms for user-generated content, real-time information sharing, and algorithmic content distribution. Shape political discourse, misinformation spread, and community formation.',
+      icon: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>'
+    },
+    {
+      id: 'broadcasttv',
+      label: ['Broadcast TV'],
+      color: '#b3261e',
+      cx: 370, cy: 468,
+      faculty: 'Watts, Mutz, Levendusky',
+      desc: 'Broadcast and cable television networks. A dominant medium for news and political information that shapes public opinion through reach, framing, and editorial choice.',
+      icon: '<rect width="20" height="15" x="2" y="7" rx="2"/><polyline points="17 2 12 7 7 2"/>'
+    },
+    {
+      id: 'llms',
+      label: ['LLMs'],
+      color: '#7c3aed',
+      cx: 600, cy: 295,
+      faculty: 'Callison-Burch, Metaxa, Yildirim, Patton, Knox, Ungar, Yoo, Roth',
+      desc: 'Large language models and generative AI systems. Increasingly used for content creation, information retrieval, and automated communication, with growing implications for trust and epistemic autonomy.',
+      icon: '<path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>'
+    },
+    {
+      id: 'elites',
+      label: ['Elites'],
+      color: '#6b5b1f',
+      cx: 295, cy: 175,
+      faculty: 'Levendusky, Mutz, Hopkins, Knox, Gutmann, Lapinski, Yildirim, Albarrac\u00edn, Freelon',
+      desc: 'Politicians, political parties, business leaders, and other high-influence actors. Set agendas and shape the information environment through their visibility and power.',
+      icon: '<path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/>'
+    }
+  ];
+
+  var PUBLIC = {
+    id: 'public',
+    label: ['General Public'],
+    color: '#888680',
+    faculty: 'Albarrac\u00edn, Falk, Melumad, Lelkes, Mutz, Ungar, Patton, Metaxa, Hopkins, Levendusky, Freelon',
+    desc: 'Citizens, voters, partisan audiences, and marginalized communities. Both the primary audience of the information ecosystem and active participants who generate content and drive demand.',
+    icon: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'
+  };
+
+  var ALL_ACTORS = ACTORS.concat([PUBLIC]);
+
+  var CROWD = [
+    { x: 90,  y: 165, size: 26, op: 0.80 },
+    { x: 75,  y: 455, size: 30, op: 0.88 },
+    { x: 270, y: 65,  size: 32, op: 0.90 },
+    { x: 210, y: 225, size: 21, op: 0.65 },
+    { x: 175, y: 400, size: 36, op: 1.00 },
+    { x: 610, y: 155, size: 29, op: 0.85 },
+    { x: 335, y: 138, size: 22, op: 0.70 },
+    { x: 590, y: 450, size: 34, op: 0.92 },
+    { x: 285, y: 548, size: 27, op: 0.82 },
+    { x: 540, y: 460, size: 29, op: 0.88 },
+    { x: 465, y: 435, size: 24, op: 0.72 },
+    { x: 510, y: 195, size: 24, op: 0.75 },
+    { x: 718, y: 268, size: 22, op: 0.70 },
+    { x: 710, y: 358, size: 25, op: 0.78 }
+  ];
+
+  var PAPERS = [
+    {
+      id: 'yoo',
+      title: 'Efficiency and effectiveness of net neutrality rules in the mobile sector: Relevant developments and state of the empirical literature',
+      paths: [
+        'M 422,98 Q 362,218 375,322'
+      ],
+      bidir: false,
+      faculty: 'Christopher Yoo',
+      school: 'Penn Carey Law School',
+      link: 'https://infodem.upenn.edu/research-compendium/#efficiency-and-effectiveness-of-net-neutrality-rules-in-the-m',
+      linkText: '',
+      before: 'Yoo finds a lack of empirical evidence to support net neutrality regulations, suggesting that policy decisions in Europe and the US have largely been driven by ideological views and political considerations rather than economics and evidence.',
+      after: ''
+    },
+    {
+      id: 'albarracin',
+      title: 'Changing beliefs or changing behavior? Understanding the belief-to-behavior process and intervening to curb the impact of misinformation',
+      paths: [
+        'M 413,88 Q 250,127 100,158',
+        'M 277,178 Q 184,176 102,165'
+      ],
+      bidir: false,
+      faculty: 'Dolores Albarrac\u00edn',
+      school: 'Penn Integrates Knowledge Professor',
+      link: 'https://infodem.upenn.edu/research-compendium/#changing-beliefs-or-changing-behavior-understanding-the-beli',
+      linkText: '',
+      before: 'Albarrac\u00edn argues that to effectively combat misinformation, interventions must go beyond labeling what is true or false. It is critical to recognize when, how, and why a belief matters for behavior \u2014 and when behavior must be addressed directly.',
+      after: ''
+    },
+    {
+      id: 'watts',
+      title: 'Quantifying partisan news diets in Web and TV audiences',
+      paths: [
+        'M 348,468 Q 215,472 87,452',
+        'M 354,447 Q 290,340 218,232',
+        'M 353,348 Q 213,400 83,450',
+        'M 356,328 Q 288,278 216,233'
+      ],
+      bidir: false,
+      faculty: 'Duncan Watts',
+      school: 'Penn Integrates Knowledge Professor',
+      link: 'https://www.science.org/doi/full/10.1126/sciadv.abn0083',
+      linkText: '',
+      before: 'Watts analyzed billions of browsing and viewing events from 2016\u20132019 and found that television, not the internet, is the primary driver of partisan news segregation in the US. While only about 4% of Americans are siloed online, 17% are segregated through TV. TV news consumers are also more likely to stick to partisan sources over time, and partisan channel audiences are growing even as overall TV viewership declines.',
+      after: ''
+    },
+    {
+      id: 'santoro',
+      title: 'Listen for a change? A longitudinal field experiment on listening\'s potential to enhance persuasion',
+      paths: ['M 293,542 Q 415,548 457,440'],
+      bidir: false,
+      faculty: 'Erik Santoro',
+      school: 'Wharton School',
+      link: 'https://infodem.upenn.edu/research-compendium/#listen-for-a-change-a-longitudinal-field-experiment-on-liste',
+      linkText: '',
+      before: 'Santoro studies peer-to-peer dialogue. His recent research challenges the notion that listening to those who disagree with you helps to persuade them.',
+      after: ''
+    },
+    {
+      id: 'mutz',
+      title: 'The persistence of cross-cutting discussion in a politicized public sphere',
+      paths: ['M 102,171 Q 148,205 200,220'],
+      bidir: true,
+      faculty: 'Diana Mutz',
+      school: 'Annenberg School',
+      link: 'https://infodem.upenn.edu/research-compendium/#the-persistence-of-cross-cutting-discussion-in-a-politicized',
+      linkText: '',
+      before: 'Mutz finds significant increases in interpersonal political discussions in the U.S., largely due to increases in like-minded political discussion partners. However, conversations across the political aisle are no less common than they were 25 years ago.',
+      after: ''
+    },
+    {
+      id: 'levendusky',
+      title: 'Unraveling a \u201cCancel Culture\u201d Dynamic: When, Why, and Which Americans Sanction Offensive Speech',
+      paths: [
+        'M 219,231 Q 285,278 347,324',
+        'M 343,348 Q 260,375 192,395'
+      ],
+      bidir: false,
+      faculty: 'Matt Levendusky',
+      school: 'Annenberg School',
+      link: 'https://infodem.upenn.edu/research-compendium/#unraveling-a-cancel-culture-dynamic-when-why-and-which-ameri',
+      linkText: '',
+      before: 'In this paper, Levendusky studies how individuals engage in criticism of others through online platforms, or cancel culture. He finds that Americans vastly overestimate the degree of cancel culture, and that cancelling is motivated by disagreeable and offensive statements.',
+      after: ''
+    },
+    {
+      id: 'metaxa',
+      title: 'Lower Quantity, Higher Quality: Auditing News Content and User Perceptions on Twitter/X Algorithmic versus Chronological Timelines',
+      paths: [
+        'M 155,295 Q 260,315 365,338',
+        'M 365,348 Q 270,374 185,400',
+        'M 373,352 Q 415,395 460,432'
+      ],
+      bidir: false,
+      faculty: 'Dana\u00e9 Metaxa',
+      school: 'Computer and Information Sciences',
+      link: 'https://dl.acm.org/doi/10.1145/3687046',
+      linkText: '',
+      before: 'Metaxa and colleagues conducted an audit on how X\'s algorithm shaped news exposure and user perceptions over time. They find that X\'s algorithmic timeline had lower quantity of news but it was more reliable and balanced compared to the chronological feed.',
+      after: ''
+    },
+    {
+      id: 'melumad',
+      title: 'Experimental evidence of the effects of large language models versus web search on depth of learning',
+      paths: [
+        'M 609,169 Q 604,218 602,267',
+        'M 598,323 Q 564,378 573,433'
+      ],
+      bidir: false,
+      faculty: 'Shiri Melumad',
+      school: 'Wharton School',
+      link: 'https://infodem.upenn.edu/research-compendium/#experimental-evidence-of-the-effects-of-large-language-model',
+      linkText: '',
+      before: 'Melumad\u2019s work looks at how everyday users interact with LLMs and its impact on learning outcomes. Her research finds that people relying on LLM summaries develop shallower knowledge than traditional web search users, because LLMs bypass the active discovery process that deepens learning.',
+      after: ''
+    },
+    {
+      id: 'lelkes',
+      title: 'Sanctioning political speech on social media is driven by partisan norms and identity signaling',
+      paths: [
+        'M 91,174 Q 133,286 171,390',
+        'M 282,536 Q 231,473 179,409',
+        'M 183,393 Q 276,367 356,345'
+      ],
+      bidir: false,
+      faculty: 'Yphtach Lelkes',
+      school: 'Annenberg School',
+      link: 'https://infodem.upenn.edu/research-compendium/#sanctioning-political-speech-on-social-media-is-driven-by-pa',
+      linkText: '',
+      before: 'Lelkes looks at why users shame people on social media for offending political sentiments and finds that such online \u201csanctioning\u201d behavior has a performative element: it allows users to signal their party allegiance and loyalty.',
+      after: ''
+    },
+    {
+      id: 'callisonburch',
+      title: 'Media Bias Detector: Designing and Implementing a Tool for Real-Time Selection and Framing Bias Analysis in News Coverage',
+      paths: [
+        'M 588,308 Q 490,390 382,454',
+        'M 382,462 Q 420,450 455,438'
+      ],
+      bidir: false,
+      faculty: 'Chris Callison-Burch',
+      school: 'Computer and Information Science',
+      link: 'https://dl.acm.org/doi/10.1145/3706598.3713716',
+      linkText: '',
+      before: 'Callison-Burch (with Watts) introduce the Media Bias Detector, an LLM-powered tool that analyzes real-time selection and framing bias across news publishers \u2014 revealing how editorial decisions shape the information readers receive.',
+      after: ''
+    },
+    {
+      id: 'gonzalezbailon',
+      title: 'More platforms, less attention to news? A multi-platform analysis of news exposure across TV, web, and YouTube in the United States',
+      paths: [
+        'M 368,453 Q 358,400 368,354',
+        'M 393,356 Q 460,408 528,452'
+      ],
+      bidir: false,
+      faculty: 'Sandra Gonz\u00e1lez-Bail\u00f3n',
+      school: 'Annenberg School',
+      link: 'https://infodem.upenn.edu/research-compendium/#more-platforms-less-attention-to-news-a-multi-platform-analy',
+      linkText: '',
+      before: 'Gonz\u00e1lez-Bail\u00f3n tracks news exposure across TV, web, and YouTube for 55,000 Americans, finding that a multi-platform media environment generally leads to less news attention. However, a committed minority of news followers engage more, accounting for most news engagement.',
+      after: ''
+    },
+    {
+      id: 'hopkins',
+      title: 'The Rise of and Demand for Identity-Oriented Media Coverage',
+      paths: [
+        'M 502,204 Q 435,262 389,320',
+        'M 354,324 Q 248,268 164,290'
+      ],
+      bidir: false,
+      faculty: 'Dan Hopkins',
+      school: 'Political Science',
+      link: 'https://infodem.upenn.edu/research-compendium/#the-rise-of-and-demand-for-identity-oriented-media-coverage',
+      linkText: '',
+      before: 'In this paper, Hopkins looks at whether news outlets highlight social identities like race, gender, religion, and political affiliation in their online coverage to generate more audience engagement, and whether that audience demand helps explain why such news coverage has grown in recent years.',
+      after: ''
+    },
+    {
+      id: 'morse',
+      title: 'The State of Voter Registration Research',
+      paths: [
+        'M 418,88 Q 378,112 344,132',
+        'M 337,132 Q 368,100 416,84',
+        'M 442,88 Q 476,140 506,188',
+        'M 508,186 Q 480,128 444,84'
+      ],
+      bidir: false,
+      faculty: 'Michael Morse',
+      school: 'Penn Carey Law School',
+      link: 'https://portal.electioncenter.org/common/Uploaded%20files/Journals/JEARP%20Vol%203%20SI.pdf#page=50',
+      linkText: '',
+      before: 'In a review of the evidence on voter registration, Morse recommends that election officials should pursue ways to increase the number of individuals who initiate or update their voter registrations during routine interactions with government agencies.',
+      after: ''
+    },
+    {
+      id: 'miller',
+      title: 'Who Not What: The Logic of China\u2019s Information Control Strategy',
+      paths: [
+        'M 424,107 Q 442,210 378,313'
+      ],
+      bidir: false,
+      faculty: 'Blake Miller',
+      school: 'Political Science',
+      link: 'https://www.cambridge.org/core/journals/china-quarterly/article/who-not-what-the-logic-of-chinas-information-control-strategy/4DC69883679770CBCDB1F1B87A34F09E',
+      linkText: '',
+      before: 'Miller\u2019s research looks at how authoritarian regimes like China control the information environment. Their work finds that the CCP\u2019s information control is more about individuals and less about content: the state permits debate while targeting influential users who may threaten or undermine Chinese interests.',
+      after: ''
+    },
+    {
+      id: 'yildirim',
+      title: 'Persuasion and dissuasion in political campaigns: Communication and media coverage in senate races',
+      paths: ['M 273,192 Q 212,234 162,277'],
+      bidir: true,
+      faculty: 'Pinar Yildirim',
+      school: 'Wharton School',
+      link: 'https://infodem.upenn.edu/research-compendium/#persuasion-and-dissuasion-in-political-campaigns-communicati',
+      linkText: '',
+      before: 'Yildirim\u2019s research analyzes 400+ Senate races and finds that the effect of campaign speeches on electoral performance are constrained by what media organizations choose to amplify, which tends to be polarizing content.',
+      after: ''
+    },
+    {
+      id: 'falk',
+      title: 'Brain activity explains message effectiveness: A mega-analysis of 16 neuroimaging studies',
+      paths: [
+        'M 616,163 Q 672,212 714,261'
+      ],
+      bidir: false,
+      faculty: 'Emily Falk',
+      school: 'Annenberg School',
+      link: 'https://infodem.upenn.edu/research-compendium/#brain-activity-explains-message-effectiveness-a-mega-analysi',
+      linkText: '',
+      before: 'Falk\u2019s research shows that neural indicators of reward, language, and emotional processing are associated with the persuasiveness of messages both for individuals and at scale.',
+      after: ''
+    },
+    {
+      id: 'patton',
+      title: 'How Well Do Large Language Models Understand African American Language? Causes and Implications',
+      paths: [
+        'M 627,289 Q 667,275 707,271',
+        'M 624,309 Q 662,333 700,353'
+      ],
+      bidir: false,
+      faculty: 'Desmond Patton',
+      school: 'Penn Integrates Knowledge Professor',
+      link: 'https://infodem.upenn.edu/research-compendium/#how-well-do-large-language-models-understand-african-america',
+      linkText: '',
+      before: 'Patton\u2019s review paper shows how and why LLMs struggle to interpret African American Language (AAL). AAL speakers must work harder to be understood by LLMs, which can make them feel like their cultural and linguistic traditions are not valued.',
+      after: ''
+    },
+    {
+      id: 'halljamieson',
+      title: 'Using a mental model approach to undercut the effects of exposure to mRNA vaccination misconceptions: Two randomized trials',
+      paths: [
+        'M 293,164 Q 283,120 272,76',
+        'M 290,185 Q 235,287 180,390'
+      ],
+      bidir: false,
+      faculty: 'Kathleen Hall Jamieson',
+      school: 'Annenberg School',
+      link: 'https://infodem.upenn.edu/research-compendium/#using-a-mental-model-approach-to-undercut-the-effects-of-exp',
+      linkText: '',
+      before: 'Jamieson introduces a \u201cmental model approach\u201d for how institutions and elites can combat vaccine misinformation. The paper argues that demonstrating how vaccines actually work is more effective than directly rebutting false claims.',
+      after: ''
+    },
+    {
+      id: 'freelon',
+      title: 'The Post-API Age of Social Media Data Access: Past, Present, and Future',
+      paths: [
+        'M 362,328 Q 255,258 298,182',
+        'M 302,182 Q 395,258 364,332'
+      ],
+      bidir: false,
+      faculty: 'Deen Freelon',
+      school: 'Annenberg School',
+      link: 'https://infodem.upenn.edu/research-compendium/#the-post-api-age-of-social-media-data-access-past-present-an',
+      linkText: '',
+      before: 'Freelon provides a historical overview of social media data access and how it has evolved in the last twenty years, finding a persistent trend toward reduced researcher access contingent on factors beyond researchers\u2019 control.',
+      after: ''
+    },
+    {
+      id: 'roth',
+      title: 'Learning Human-Perceived Fakeness in AI-Generated Videos via Multimodal LLMs',
+      paths: [
+        'M 591,434 Q 628,363 603,312'
+      ],
+      bidir: false,
+      faculty: 'Dan Roth',
+      school: 'Computer and Information Science',
+      link: 'https://infodem.upenn.edu/research-compendium/#learning-human-perceived-fakeness-in-ai-generated-videos-via',
+      linkText: '',
+      before: 'Roth introduces a benchmark of AI-generated videos that captures not just whether a video is fake, but the exact visual clues that reveal the fake. While frontier models like GPT-5 exceeded 70% detection accuracy, precisely locating the deepfake clue was harder, with below 36% success. Fine-tuning models on the new benchmark led to large improvements in deepfake sign detection.',
+      after: ''
+    },
+    {
+      id: 'ungar',
+      title: 'Culturally-Aware Conversations: A Framework & Benchmark for LLMs',
+      paths: [
+        'M 305,179 Q 448,235 590,291',
+        'M 593,287 Q 555,245 517,203'
+      ],
+      bidir: false,
+      faculty: 'Lyle Ungar',
+      school: 'Computer and Information Science',
+      link: 'https://infodem.upenn.edu/research-compendium/#culturally-aware-conversations-a-framework-amp-benchmark-for',
+      linkText: '',
+      before: 'Ungar introduces the \u201cfirst framework and benchmark designed to evaluate LLMs in realistic, multicultural conversational settings,\u201d to help guide future AI development that respects and accounts for diversity in communication.',
+      after: ''
+    },
+    {
+      id: 'knox',
+      title: 'Short-term exposure to filter-bubble recommendation systems has limited polarization effects: Naturalistic experiments on YouTube',
+      paths: [
+        'M 393,350 Q 490,400 583,443'
+      ],
+      bidir: false,
+      faculty: 'Dean Knox',
+      school: 'Wharton School',
+      link: 'https://infodem.upenn.edu/research-compendium/#short-term-exposure-to-filter-bubble-recommendation-systems',
+      linkText: '',
+      before: 'In this paper, Knox looked at whether YouTube\u2019s recommendation systems can radicalize users, finding that, while recommendation algorithms may shape content exposure and user preferences, narratives about widespread algorithmic manipulation may be overstated.',
+      after: ''
+    },
+    {
+      id: 'lapinski',
+      title: 'Reluctant Republicans, Eager Democrats? Partisan Nonresponse and the Accuracy of 2020 Presidential Pre-election Telephone Polls',
+      paths: [
+        'M 283,163 Q 278,115 271,78',
+        'M 308,168 Q 460,162 603,161',
+        'M 271,68 Q 350,55 428,76',
+        'M 607,149 Q 518,100 432,79'
+      ],
+      bidir: false,
+      faculty: 'John Lapinski',
+      school: 'Political Science',
+      link: 'https://academic.oup.com/poq/article/86/2/247/6585580',
+      linkText: '',
+      before: "Lapinski\u2019s research found that Democrats were more likely to cooperate with telephone poll interviewers than Republicans and independents by 3 and 6 percentage points respectively, even after controlling for demographic and geographic factors.",
+      after: ''
+    },
+    {
+      id: 'culhane',
+      title: 'Leveraging integrated data for program evlauation: Recommendations from the field',
+      paths: [],
+      bidir: false,
+      faculty: 'Dennis Culhane',
+      school: 'School of Social Policy & Practice',
+      link: 'https://www.sciencedirect.com/science/article/pii/S0149718922000477',
+      linkText: '',
+      before: 'A nationwide expert on longitudinal data systems, Culhane provides an overview and guidance for the growing field of Integrated Data Systems (IDS), including how to leverage cross-sector administrative data for policy evaluation and computational social science.',
+      after: ''
+    },
+    {
+      id: 'gutmann',
+      title: 'Crisis in Democracy: Renewing Trust in America',
+      paths: [
+        'M 295,185 Q 215,237 155,282',
+        'M 155,305 Q 140,370 165,390'
+      ],
+      bidir: false,
+      faculty: 'Amy Gutmann',
+      school: 'Penn President Emerita',
+      link: 'https://www.aspeninstitute.org/wp-content/uploads/2025/05/Knight2019.pdf',
+      linkText: '',
+      before: 'As a member of the Knight Commission on Trust, Media, and Democracy, Gutmann contributed to the Commission\u2019s flagship report diagnosing the collapse of a shared information foundation as a core threat to American self-governance. It traces how the proliferation of misinformation, the inability to agree on facts, and the erosion of trust in news have created a \u201cpost-truth\u201d environment in which democratic participation becomes untenable. The report provides concrete recommendations to restore trust in journalism, strengthen democracy through technology, and revitalize citizenship.',
+      after: ''
+    }
+  ];
+
+  /* ── faculty websites ───────────────────────── */
+  var WEBSITES = {
+    watts:          'https://www.asc.upenn.edu/people/faculty/duncan-j-watts-phd',
+    yoo:            'https://www.law.upenn.edu/faculty/csyoo/',
+    lelkes:         'https://www.ylelkes.com/',
+    halljamieson:   'https://www.asc.upenn.edu/people/faculty/kathleen-hall-jamieson-phd',
+    gonzalezbailon: 'https://sandragonzalezbailon.net/',
+    hopkins:        'https://live-sas-www-polisci.pantheon.sas.upenn.edu/people/standing-faculty/daniel-hopkins',
+    patton:         'https://sp2.upenn.edu/person/desmond-upton-patton/',
+    metaxa:         'https://metaxa.net/',
+    albarracin:     'https://socialactionlab.org/',
+    levendusky:     'https://web.sas.upenn.edu/mleven/',
+    freelon:        'https://dfreelon.org/',
+    yildirim:       'https://marketing.wharton.upenn.edu/profile/pyild/',
+    falk:           'https://www.asc.upenn.edu/people/faculty/emily-falk-phd',
+    santoro:        'https://oid.wharton.upenn.edu/profile/santoroe/#teaching',
+    callisonburch:  'https://www.cis.upenn.edu/~ccb/',
+    ungar:          'https://www.cis.upenn.edu/~ungar/',
+    knox:           'http://www.dcknox.com/',
+    miller:         'http://blakeapm.com/',
+    lapinski:       'https://live-sas-www-polisci.pantheon.sas.upenn.edu/people/standing-faculty/john-lapinski',
+    melumad:        'http://www.shirimelumad.com/',
+    morse:          'https://www.law.upenn.edu/faculty/morsem',
+    mutz:           'https://live-sas-www-polisci.pantheon.sas.upenn.edu/people/standing-faculty/diana-mutz',
+    roth:           'https://www.cis.upenn.edu/~danroth/',
+    culhane:        'https://sp2.upenn.edu/person/dennis-culhane/',
+    gutmann:        'https://www.asc.upenn.edu/people/faculty/amy-gutmann-phd'
+  };
+
+  /* ── faculty biographies ────────────────────── */
+  var BIOS = {
+    watts:         'Duncan Watts (Center Co-Director) is the Stevens University Professor and a Penn Integrates Knowledge University Professor with appointments in the Annenberg School, the Department of Computer and Information Science, and in the Wharton School. Duncan also directs the <a href="https://css.seas.upenn.edu/" target="_blank" rel="noopener noreferrer">Computational Social Science Lab</a> at Penn, which houses the <a href="https://css.seas.upenn.edu/project/penn-map/" target="_blank" rel="noopener noreferrer">Penn Media Accountability Project</a> (PennMAP). Also supported by the Center for Media, Technology, and Democracy, PennMAP is dedicated to enhancing media transparency and accountability at the scale of the entire information ecosystem. Duncan\u2019s recent work identifies <a href="https://www.nature.com/articles/s41598-025-01046-7" target="_blank" rel="noopener noreferrer">a divide in bias between cable and broadcast TV news</a>, highlights the <a href="https://www.nature.com/articles/s41586-024-07417-w" target="_blank" rel="noopener noreferrer">dangers of high misinformation exposure to a small fringe of people</a>, examines <a href="https://www.science.org/doi/full/10.1126/science.adk3451" target="_blank" rel="noopener noreferrer">the gray area of factually accurate but deceptive content</a>, and <a href="https://www.pnas.org/doi/full/10.1073/pnas.2313377121" target="_blank" rel="noopener noreferrer">estimating the effects of YouTube\u2019s recommender systems</a>.',
+    yoo:           'Christopher Yoo (Center Co-Director) is the Imasogie Professor in Law and Technology with appointments in the Penn Carey Law School, Annenberg School, and the Department of Computer and Information Science. Christopher is also the Founding Director of the Center for Technology, Innovation &amp; Competition. Some of his recent research projects include investigating innovative ways to <a href="https://repository.upenn.edu/entities/publication/daa4e80f-9819-4166-a02d-19bb54f096db" target="_blank" rel="noopener noreferrer">connect more people to the Internet</a>; <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5486746" target="_blank" rel="noopener noreferrer">standards-based governance for AI</a>; as well as <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4610515" target="_blank" rel="noopener noreferrer">the First Amendment issues raised by the regulation of social media</a>.',
+    levendusky:    'Matt Levendusky is a professor of Political Science, as well as the Stephen and Mary Baran Chair in the Institutions of Democracy at the Annenberg Public Policy Center. He is most closely associated with the study of polarization, but is more broadly a scholar of democracy. His work has often focused on <a href="https://press.uchicago.edu/ucp/books/book/chicago/H/bo16468853.html" target="_blank" rel="noopener noreferrer">partisan media</a>, <a href="https://web.sas.upenn.edu/mleven/files/2016/10/Druckman_Levendusky_McLain_AJPS-2gceaik.pdf" target="_blank" rel="noopener noreferrer">two-step communication flows</a>, and <a href="https://web.sas.upenn.edu/mleven/files/2021/04/PolComm_Sinclai" target="_blank" rel="noopener noreferrer">local news</a>, and many other topics. Currently, Matt is working on trying to understand attention, broadly defined, from short-form video content to long-form podcasts.',
+    callisonburch: 'Chris Callison-Burch is a Professor of Computer and Information Science whose course on Artificial Intelligence has one of the highest enrollments at Penn, with nearly 700 students taking it this Fall. His current research is focused on applications of large language models, including <a href="https://ojs.aaai.org/index.php/AAAI/article/view/34120" target="_blank" rel="noopener noreferrer">evaluating</a> and <a href="https://arxiv.org/pdf/2507.12948" target="_blank" rel="noopener noreferrer">improving</a> the reasoning of LLMs. He also collaborates with Duncan Watts and others on the <a href="https://mediabiasdetector.seas.upenn.edu/" target="_blank" rel="noopener noreferrer">Media Bias Detector</a>, employing LLMs to analyze news. In 2023, Chris <a href="https://judiciary.house.gov/sites/evo-subsites/republicans-judiciary.house.gov/files/evo-media-document/callison-burch-testimony-sm.pdf" target="_blank" rel="noopener noreferrer">testified before the House of Representatives</a> about the relationship between generative AI and copyright law.',
+    lelkes:        'Yphtach Lelkes (Center Faculty Advisor) is an Associate Professor at the Annenberg School for Communication and the Co-director for the Polarization Research Lab as well as the Center for Information Networks and Democracy. His work focuses on the roots and consequences of polarization, how changes to the information environment impact political attitudes, and the relationship between psychological perspectives and political belief system structures. Yph\u2019s recent publications include <a href="https://aclanthology.org/2025.findings-acl.1144/" target="_blank" rel="noopener noreferrer">assessments of inconsistencies in LLM-hate speech detection</a>, <a href="https://www.cambridge.org/core/journals/political-science-research-and-methods/article/american-partisans-vastly-underestimate-the-diversity-of-other-partisans-policy-attitudes/CD71B9D75D10CFA0A9A07501E1CCD81A" target="_blank" rel="noopener noreferrer">underestimation of the diversity of partisan attitudes by out-groups</a>, and greater demand for <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12875" target="_blank" rel="noopener noreferrer">identity-oriented media coverage</a>.',
+    halljamieson:  'Kathleen Hall Jamieson (Center Faculty Advisor) is the Elizabeth Ware Packard Professor of Communication at the Annenberg School for Communication, the Walter and Leonore Annenberg Director of the University\u2019s Annenberg Public Policy Center, as well as the co-founder of FactCheck.org and SciCheck. She has focused on the political attitudes and polarized language associated with science and emerging technology topics, as well as ways to protect the integrity of research and science in an age of politicized rhetoric and consequential AI advances. Kathleen\u2019s recent publications hone in on the <a href="https://www.pnas.org/doi/abs/10.1073/pnas.2407886121" target="_blank" rel="noopener noreferrer">benefits and potential risks of AI to the field of science</a>, how <a href="https://www.tandfonline.com/doi/pdf/10.1080/10810730.2024.2357571" target="_blank" rel="noopener noreferrer">trust in climate science is impacted</a> by media politicization, and how efforts to counter misinformation should involve <a href="https://www.frontiersin.org/journals/communication/articles/10.3389/fcomm.2025.1490292/full" target="_blank" rel="noopener noreferrer">engaging in-group trusted leaders</a>.',
+    gonzalezbailon:'Sandra Gonz\u00e1lez-Bail\u00f3n (Center Faculty Advisor) is the Carolyn Marvin Professor of Communication at the Annenberg School for Communication, Co-Director of the Center for Information Networks and Democracy, and holds a secondary appointment in the Department of Sociology. Her research interests include how online networks and algorithmic curation shape exposure to information, with implications for how we think about political engagement, information diffusion, and the consumption of news. Sandra\u2019s recent research includes the analysis of <a href="https://shorturl.at/c5a5j" target="_blank" rel="noopener noreferrer">news exposure in a multi-platform environment</a>, the reconstruction of <a href="https://sociologicalscience.com/download/vol_11/december/SocSci_v11_1124to1146_2.pdf" target="_blank" rel="noopener noreferrer">viral diffusion chains for political and non-political information</a>, and the analysis of <a href="https://www.science.org/stoken/author-tokens/ST-1428/full" target="_blank" rel="noopener noreferrer">ideological segregation in exposure to news on social media</a>.',
+    hopkins:       'Daniel J. Hopkins (Center Faculty Advisor) is the Julie and Martin Franklin Presidential Professor of Political Science, with secondary appointments at the School of Engineering and Applied Science and the Annenberg School for Communication. He is a co-founder of the Philadelphia Behavioral Science Initiative. He focuses on American politics and the politics of select other democracies, with an emphasis on racial and ethnic politics; state and local politics; and political behavior. Daniel\u2019s recent publications include the <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12845" target="_blank" rel="noopener noreferrer">limited effects of online interventions</a> to spur state and local news consumption, the <a href="https://www.researchgate.net/publication/392681180_Public_Support_for_Cross-Issue_Compromises_in_the_US" target="_blank" rel="noopener noreferrer">sources of public support for and opposition to cross-issue compromises</a>, and research on the <a href="https://onlinelibrary.wiley.com/doi/10.1111/ajps.12875" target="_blank" rel="noopener noreferrer">impacts of social media on the growth of identity-oriented news coverage</a>.',
+    patton:        'Desmond Patton (Center Faculty Advisor) is a Penn Integrates Knowledge University Professor, with joint appointments in the School of Social Policy &amp; Practice and the Annenberg School for Communication, where he is the Waldo E Johnson Jr. Professor of Communication, and also holds secondary appointments in the Department of Psychiatry at Children\u2019s Hospital of Philadelphia &amp; Perelman School of Medicine. He is founding director of SAFElab and the founding faculty director of the Penn Center for Inclusive Innovation &amp; Technology. Desmond\u2019s research focuses on how online communities influence offline behavior and seeks to better integrate culture, context, and inclusion into machine learning and computer vision analysis. Desmond\u2019s recent publications include suggestions for <a href="https://academic.oup.com/edited-volume/59762/chapter/529997948" target="_blank" rel="noopener noreferrer">child participation in AI governance</a>, and the harmful implications of <a href="https://link.springer.com/article/10.1007/s43681-024-00623-2" target="_blank" rel="noopener noreferrer">LLM outputs lacking culturally-relevant linguistic contexts</a>.',
+    metaxa:        'Dana\u00e9 Metaxa (Center Faculty Advisor) is the Raj and Neera Singh Term Assistant Professor in the Computer and Information Science department, with a secondary appointment in the Annenberg School for Communication. They are the co-founder of the Penn Human Computer Interaction group and serve on the editorial board of the Journal of Online Trust and Safety. Dana\u00e9 studies bias and representation in algorithmic systems and content, focusing on social settings like politics, employment, and advertising, and on marginalized groups. Their recent work includes researching harms caused to users, particularly minorities, <a href="https://dl.acm.org/doi/full/10.1145/3706598.3713897" target="_blank" rel="noopener noreferrer">when others perceive or suspect them of using AI</a>; platform development to <a href="https://dl.acm.org/doi/abs/10.1145/3610209" target="_blank" rel="noopener noreferrer">investigate the premise that personalized ad targeting is more effective</a> on users; and a sociotechnical audit investigating how <a href="https://dl.acm.org/doi/abs/10.1145/3687046" target="_blank" rel="noopener noreferrer">X\u2019s timeline algorithm affects news curation</a> and user perceptions.',
+    albarracin:    'Dolores Albarrac\u00edn is a Penn Integrates Knowledge University Professor and is the Director at the Social Action Lab as well as the Communication Science Division at the Annenberg Public Policy Center. She studies the impact of communication and persuasion on human behavior and the formation of beliefs, attitudes, and goals, particularly those that are socially beneficial. She has published books on <a href="https://www.cambridge.org/core/books/creating-conspiracy-beliefs/918C84AEC301D40B569399C2B80D0517" target="_blank" rel="noopener noreferrer">conspiracy theory formation</a> and how <a href="https://www.cambridge.org/core/books/action-and-inaction-in-a-social-world/F359EC09F1FEDCFE5CDBAB9FDD407C9F" target="_blank" rel="noopener noreferrer">social cognition changes behavior</a>, and has worked extensively on the <a href="https://www.tandfonline.com/doi/pdf/10.1080/1047840X.2025.2482343" target="_blank" rel="noopener noreferrer">relationship between beliefs and behaviors</a>. Dolores\u2019 recent publications include identification and exploration of the main <a href="https://www.elgaronline.com/edcollchap/book/9781035310661/chapter2.xml" target="_blank" rel="noopener noreferrer">processes to impact change in attitudes and beliefs</a> <a href="https://psycnet.apa.org/record/2025-47011-001" target="_blank" rel="noopener noreferrer">bypassing over correcting misinformation</a> as a possible way of changing attitudes and behavioral intentions, and the <a href="https://www.tandfonline.com/doi/full/10.1080/10584609.2025.2472768" target="_blank" rel="noopener noreferrer">impact of linguistics on voting intentions</a>.',
+    freelon:       'Deen Freelon is the Allan Randall Freelon Sr. Professor and the Presidential Professor at the Annenberg School for Communication, where he runs the Political and Entity Communication Lab. He applies computational methods to social media data and focuses on digital politics, mis/disinformation, conspiracy theories, hyperpartisan content, ideological asymmetry, identity politics, and personalized information environments. Deen\u2019s recent works include the development of a <a href="https://asistdl.onlinelibrary.wiley.com/doi/full/10.1002/asi.24869" target="_blank" rel="noopener noreferrer">data collection system</a> to study personalized information environments; exploration of how <a href="https://www.tandfonline.com/doi/full/10.1080/19312458.2023.2181319" target="_blank" rel="noopener noreferrer">APIs, data donations, and screen tracking</a> can be used to study misinformation, algorithmic bias, and well-being; and the <a href="https://www.sciencedirect.com/science/article/pii/S2352250X2300218X" target="_blank" rel="noopener noreferrer">shared psychological roots</a> of prejudice and conspiracy theory belief.',
+    mutz:          'Diana Mutz holds the Samuel Stouffer Chair in Political Science and Communication, where she also serves as Director of the Institute for the Study of Citizens and Politics. Her research focuses on how the American mass public forms opinions on domestic and international issues. She is a Fellow of the National Academy of Sciences, a Fellow of the American Academy of Arts and Sciences, and recipient of the Lifetime Career Achievement Award in Political Communication. Mutz has published empirical research in a wide variety of journals. Her award-winning books include Hearing the Other Side: Deliberative versus Participatory Democracy and In-Your-Face Politics: The Consequences of Uncivil Media. Her latest book, Winners and Losers: The Psychology of Foreign Trade, received the American Political Science Association\u2019s Best Book Award in 2022.',
+    ungar:         'Lyle Ungar is a Professor of Computer and Information Science and he also holds appointments in Psychology, Bioengineering, Genomics and Computational Biology, and Operations, Information and Decisions. Lyle uses scalable machine learning methods for data mining and text mining and analysis of text and images in social media to better understand the drivers of physical and mental well-being. Some of his recent work explores using <a href="https://arxiv.org/pdf/2507.16252" target="_blank" rel="noopener noreferrer">large language models for tutoring</a> and <a href="https://verixiv.org/articles/2-179" target="_blank" rel="noopener noreferrer">language learning</a>; as well as how interacting with AI chatbots <a href="https://academic.oup.com/pnasnexus/article/3/9/pgae397/7762141?trk=public_post_comment-text" target="_blank" rel="noopener noreferrer">affects perceptions of other people</a>. He also studies online platforms, such as the <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=KCiDjbkAAAAJ&amp;cstart=20&amp;pagesize=80&amp;sortby=pubdate&amp;citation_for_view=KCiDjbkAAAAJ:7LH0YzRCML8C" target="_blank" rel="noopener noreferrer">causal impact of civility on platform engagement</a> and using <a href="https://www.tandfonline.com/doi/pdf/10.1080/17439760.2023.2218341" target="_blank" rel="noopener noreferrer">social media data to assess well-being</a>.',
+    roth:          'Dan Roth is the Eduardo D. Glandt Distinguished Professor of Computer and Information Science and the Chief AI Scientist at Oracle. He is <a href="https://arxiv.org/pdf/2508.14488" target="_blank" rel="noopener noreferrer">advancing</a> the field of <a href="https://dl.acm.org/doi/abs/10.1145/3711896.3736800" target="_blank" rel="noopener noreferrer">reasoning in large language models</a>, on which he gave a <a href="https://www.youtube.com/watch?v=oKCbgurfb6M" target="_blank" rel="noopener noreferrer">recent keynote at the KDD Conference</a>. He is also working on many fundamental problems in <a href="https://arxiv.org/abs/2501.18539" target="_blank" rel="noopener noreferrer">information access</a>, as it applies to <a href="https://arxiv.org/abs/2501.05452" target="_blank" rel="noopener noreferrer">multimodal</a> <a href="https://arxiv.org/abs/2505.18961" target="_blank" rel="noopener noreferrer">information sources</a>, and on <a href="https://arxiv.org/abs/2112.08357" target="_blank" rel="noopener noreferrer">information pollution</a> and <a href="https://arxiv.org/abs/2504.19472" target="_blank" rel="noopener noreferrer">conflicts</a> in the information ecosystem. Previously, Dan was a Vice President and Distinguished Scientist at Amazon, where he led the scientific effort behind Amazon\u2019s first-generation GenAI products, including Titan Models, Amazon Q, and Amazon Bedrock. Dan is a Fellow of the AAAS, ACM, AAAI, and ACL, and a recipient of the IJCAI John McCarthy Award.',
+    yildirim:      'Pinar Yildirim is Associate Professor of Marketing at the Wharton School, a secondary Associate Professor of Economics at the Department of Economics, as well as Senior Fellow at the Center for Technology, Innovation &amp; Competition. Pinar studies online platforms, artificial intelligence, privacy, digitization, and social networks\u2014including social network design and the impact of advertising on media content. Her recent publications study the substitutability of <a href="https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2021.00845" target="_blank" rel="noopener noreferrer">charitable and political giving</a>, <a href="https://www.econstor.eu/bitstream/10419/284089/1/wp2024-04.pdf" target="_blank" rel="noopener noreferrer">conflicts of interest between politicians and the media that covers them</a>, as well as how politicians respond <a href="https://www.nber.org/system/files/chapters/c15130/c15130.pdf" target="_blank" rel="noopener noreferrer">to labor market changes</a> driven by automation.',
+    miller:        'Blake Miller is an Assistant Professor of Political Science and affiliated with the Center for the Study of Contemporary China. Their research examines how authoritarian regimes control media, the internet, and civil society organizations, with an empirical focus on China. Blake\u2019s recent publications include examining the <a href="https://www.lse.ac.uk/research/research-for-the-world/society/ngo-activism-authoritarian-states" target="_blank" rel="noopener noreferrer">role NGOs in authoritarian regimes</a>, the logic behind <a href="https://www.cambridge.org/core/services/aop-cambridge-core/content/view/4DC69883679770CBCDB1F1B87A34F09E/S0305741021000345a.pdf/div-class-title-who-not-what-the-logic-of-china-s-information-control-strategy-div.pdf" target="_blank" rel="noopener noreferrer">media platforms\u2019 decisions to report users</a> or content to the Chinese Communist Party, and the <a href="https://www.cambridge.org/core/journals/political-analysis/article/abs/active-learning-approaches-for-labeling-text-review-and-assessment-of-the-performance-of-active-learning-approaches/CF6AAF05F465D5BC688A9548433123C1" target="_blank" rel="noopener noreferrer">introduction of a framework</a> to help minimize the amount of data required to train a machine learning model.',
+    falk:          'Emily Falk is a Professor of Communication, Psychology, Marketing, as well as of Operations, Informatics, and Decisions, and further the Vice Dean of the Annenberg School for Communication. Her research uses tools from psychology, neuroscience, and communication to examine <a href="https://pubmed.ncbi.nlm.nih.gov/41200100/" target="_blank" rel="noopener noreferrer">what makes messages persuasive</a>, why and how ideas spread, and what makes people effective communicators. Her recent research has found that people are more likely to <a href="https://academic.oup.com/pnasnexus/article/4/2/pgaf019/7974719" target="_blank" rel="noopener noreferrer">share news content perceived as more socially relevant</a>, and that <a href="https://alyssasinclair.com/files/2024_Sinclair_NE.pdf" target="_blank" rel="noopener noreferrer">affective framing of headlines influences engagement and memory</a>.',
+    lapinski:      'John Lapinski is the Robert A. Fox Professor of Political Science and the Director of the Penn Program on Opinion Research and Election Studies. John is also the Director of the Elections Unit at NBC News, where he is responsible for projecting races for the network. He also covers opinion polling. His research has focused on the <a href="https://onlinelibrary.wiley.com/doi/10.1111/ajps.12281" target="_blank" rel="noopener noreferrer">empirical analysis of congressional decision-making</a> as well as survey methodology, such as the <a href="https://academic.oup.com/poq/article-abstract/86/2/247/6585580?login=false" target="_blank" rel="noopener noreferrer">predictive validity of polling</a> on election outcomes.',
+    knox:          'Dean Knox is a computational social scientist, as well as an Assistant Professor of Operations, Information and Decisions, and of Statistics and Data Science, at the Wharton School. Dean\u2019s recent work finds <a href="https://www.pnas.org/doi/10.1073/pnas.2318127122" target="_blank" rel="noopener noreferrer">short-term exposure to filter-bubble recommendation systems</a> has a limited effect on polarization, and another paper demonstrates the <a href="https://academic.oup.com/jrsssa/advance-article/doi/10.1093/jrsssa/qnaf059/8169283?login=true" target="_blank" rel="noopener noreferrer">causal effects of vocal style in presidential campaign speeches</a>. Dean is also a scholar of policing, a <a href="https://www.carnegie.org/awards/andrew-carnegie-fellows/2021/" target="_blank" rel="noopener noreferrer">2021 Andrew Carnegie Fellow</a>, and the inaugural recipient of Science magazine\u2019s early career award for interdisciplinary research.',
+    melumad:       'Shiri Melumad is an Associate Professor of Marketing at the Wharton School, where she studies the consumer psychology of technology usage, new media and user-generated content, and digital marketing. One major focus area is on how people generate and consume online content, including recent work <a href="https://www.researchgate.net/publication/388244016_Experimental_Evidence_of_the_Effects_of_Large_Language_Models_versus_Web_Search_on_Depth_of_Learning" target="_blank" rel="noopener noreferrer">comparing knowledge resulting from search engines versus generative AI</a> and how <a href="https://journals.sagepub.com/doi/10.1177/00222437241280068" target="_blank" rel="noopener noreferrer">voice technologies alter consumer search</a>. Other research examines how technology affects people psychologically, such as how reading vs. listening to news changes our interpretation of it.',
+    morse:         'Michael Morse is an Assistant Professor of Law with a secondary appointment in the political sciences department. He studies voting rights, election administration, and the criminal justice system; his work combines empirical methods and novel data with traditional legal scholarship. Michael\u2019s recent publications focus on the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5176240" target="_blank" rel="noopener noreferrer">privacy-transparency trade-off</a> inherent in all election reporting and <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4396446" target="_blank" rel="noopener noreferrer">the maintenance of voter registration lists</a>.',
+    santoro:       'Erik Santoro is an Assistant Professor of Operations, Information and Decisions at the Wharton School. His research examines the role of conversation in bridging societal divides. Erik\u2019s recent work explores the impact of <a href="https://www.pnas.org/doi/10.1073/pnas.2421982122" target="_blank" rel="noopener noreferrer">listening</a> on the efficacy of persuasive appeals during political disagreements and how <a href="https://www.science.org/doi/10.1126/sciadv.abn5515" target="_blank" rel="noopener noreferrer">dialogue between outpartisans</a> can reduce affective polarization.',
+    culhane:       'Dennis Culhane is the Dana and Andrew Stone Professor of Social Policy at the School of Social Policy and Practice as well as Co-founder and Faculty Director of the Actionable Intelligence for Social Policy (AISP). He is a highly regarded expert in developing critical data infrastructure, and his work has resulted in federal legislation requiring all cities and states to develop administrative data systems. Dennis has recently written on the role of <a href="https://aisp.upenn.edu/resource-article/building-sustaining-state-data-integration-efforts-legislation-funding-and-strategies/" target="_blank" rel="noopener noreferrer">legislation and executive action</a> in promoting cross-agency data sharing for public good.',
+    gutmann:       'Amy Gutmann is the Christopher H. Browne Distinguished Professor of Political Science at the School of Arts and Sciences and Professor of Communication at the Annenberg School for Communication. She is also President Emerita, having had a transformative impact as the <a href="https://www.asc.upenn.edu/people/faculty/amy-gutmann-phd" target="_blank" rel="noopener noreferrer">longest-serving president</a> of the University of Pennsylvania. From 2022\u20132024, Gutmann served as the U.S. Ambassador to Germany, where she strengthened the U.S.-German relationship through expanded support for Ukrainian defense, increased trade, and bolstered resistance to extremism. As a scholar, Gutmann has made seminal contributions on <a href="https://press.princeton.edu/books/paperback/9780691009162/democratic-education" target="_blank" rel="noopener noreferrer">democratic education</a>, <a href="https://www.hks.harvard.edu/publications/democracy-and-disagreement" target="_blank" rel="noopener noreferrer">deliberative democracy</a>, and the <a href="https://press.princeton.edu/books/hardcover/9780691153919/the-spirit-of-compromise" target="_blank" rel="noopener noreferrer">necessity of compromise for governance</a>. Gutmann served as a member of the Knight Commission on Trust, Media, and Democracy (2017\u20132019), informing a <a href="https://www.aspeninstitute.org/wp-content/uploads/2025/05/Knight2019.pdf" target="_blank" rel="noopener noreferrer">groundbreaking report</a> unpacking the crisis of democratic backsliding in the United States and recommendations for restoring public trust. Further, in 2009, President Obama appointed Gutmann as chair of the Presidential Commission for the Study of Bioethical Issues.'
+  };
+
+  /* ── faculty headshot photos ────────────────────── */
+    var PHOTOS = {
+    miller: 'assets/faculty/blake-miller.png',
+    callisonburch: 'assets/faculty/chris-callison-burch.png',
+    freelon: 'assets/faculty/deen-freelon.png',
+    culhane: 'assets/faculty/dennis-culhane.png',
+    mutz: 'assets/faculty/diana-mutz.png',
+    falk: 'assets/faculty/emily-falk.png',
+    santoro: 'assets/faculty/erik-santoro.png',
+    lapinski: 'assets/faculty/john-lapinski.png',
+    levendusky: 'assets/faculty/matt-levendusky.png',
+    morse: 'assets/faculty/michael-morse.png',
+    roth: 'assets/faculty/dan-roth.png',
+    melumad: 'assets/faculty/shiri-melumad.png',
+    ungar: 'assets/faculty/lyle-ungar.png',
+    yildirim: 'assets/faculty/pinar-yildirim.png',
+    knox: 'assets/faculty/dean-knox.png',
+    albarracin: 'assets/faculty/dolores-albarracin.png',
+    yoo: 'assets/faculty/christopher-yoo.png',
+    hopkins: 'assets/faculty/dan-hopkins.png',
+    metaxa: 'assets/faculty/danae-metaxa.png',
+    patton: 'assets/faculty/desmond-patton.png',
+    watts: 'assets/faculty/duncan-watts.png',
+    halljamieson: 'assets/faculty/kathleen-hall-jamieson.png',
+    gonzalezbailon: 'assets/faculty/sandra-gonzalez-bailon.png',
+    lelkes: 'assets/faculty/yphtach-lelkes.png',
+    gutmann: 'assets/faculty/amy-gutmann.png'
+  };
+
+  /* ── faculty without research papers on diagram ─ */
+  var FACULTY_ONLY = [];
+
+  /* ── custom card display order ──────────────── */
+  var CARD_ORDER = [
+    'watts','yoo','gutmann','lelkes','halljamieson','hopkins',
+    'patton','metaxa','gonzalezbailon','callisonburch','albarracin','levendusky',
+    'freelon','yildirim','falk','santoro','mutz','ungar',
+    'knox','miller','lapinski','melumad','morse','roth','culhane'
+  ];
+
+  /* ── helpers ─────────────────────────────────── */
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function iconSVG(paths, color, size, sw) {
+    var half = (size / 2).toFixed(1);
+    var top  = (size * 0.65).toFixed(1);
+    return '<svg x="-' + half + '" y="-' + top + '" width="' + size + '" height="' + size +
+      '" viewBox="0 0 24 24" fill="none" stroke="' + color +
+      '" stroke-width="' + (sw || 1.6) +
+      '" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none">' +
+      paths + '</svg>';
+  }
+
+  /* ── build SVG ───────────────────────────────── */
+  function buildSVG() {
+    var s = '<svg id="diagram" width="' + W + '" height="' + H +
+      '" viewBox="40 25 700 545" xmlns="http://www.w3.org/2000/svg">';
+
+    s += '<rect width="' + W + '" height="' + H + '" fill="#f8f7f4"/>';
+
+    s += '<defs>';
+    s += '<marker id="tip" viewBox="0 0 10 10" refX="9" refY="5"' +
+         ' markerWidth="6" markerHeight="6" orient="auto">' +
+         '<path d="M 0 1 L 9 5 L 0 9 z" fill="#c9c6bf"/></marker>';
+    s += '<marker id="tip-bi" viewBox="0 0 10 10" refX="9" refY="5"' +
+         ' markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
+         '<path d="M 0 1 L 9 5 L 0 9 z" fill="#c9c6bf"/></marker>';
+    s += '<marker id="tip-hover" viewBox="0 0 10 10" refX="9" refY="5"' +
+         ' markerWidth="6" markerHeight="6" orient="auto">' +
+         '<path d="M 0 1 L 9 5 L 0 9 z" fill="#f03d1f"/></marker>';
+    s += '<marker id="tip-bi-hover" viewBox="0 0 10 10" refX="9" refY="5"' +
+         ' markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
+         '<path d="M 0 1 L 9 5 L 0 9 z" fill="#f03d1f"/></marker>';
+    s += '</defs>';
+
+    PAPERS.forEach(function (p) {
+      var ms = p.bidir ? ' marker-start="url(#tip-bi)"' : '';
+      p.paths.forEach(function (pathD, idx) {
+        s += '<g class="arrow-g" data-arrow="' + p.id + '">';
+        s += '<path d="' + pathD + '" fill="none" stroke="transparent" stroke-width="12"/>';
+        s += '<path class="arrow-vis" id="av-' + p.id + '-' + idx + '" d="' + pathD +
+             '" fill="none" stroke="#c9c6bf" stroke-width="2.2"' +
+             ' stroke-dasharray="6,4" opacity="0.45"' +
+             ' marker-end="url(#tip)"' + ms + '/>';
+        s += '</g>';
+      });
+    });
+
+    ACTORS.forEach(function (a) {
+      s += '<g class="actor-g" data-actor="' + a.id +
+           '" transform="translate(' + a.cx + ',' + a.cy + ')" style="cursor:pointer">';
+      s += iconSVG(a.icon, a.color, 46, 1.6);
+      a.label.forEach(function (line, i) {
+        s += '<text y="' + (28 + i * 14) +
+             '" text-anchor="middle" font-size="11" font-weight="700"' +
+             ' fill="' + a.color + '" style="pointer-events:none">' +
+             esc(line) + '</text>';
+      });
+      s += '</g>';
+    });
+
+    CROWD.forEach(function (pos) {
+      s += '<g class="actor-g" data-actor="public" data-base-op="' + pos.op +
+           '" transform="translate(' + pos.x + ',' + pos.y + ')"' +
+           ' opacity="' + pos.op + '" style="cursor:pointer">';
+      s += iconSVG(PUBLIC.icon, PUBLIC.color, pos.size * 1.1, 1.5);
+      s += '</g>';
+    });
+
+    /* ── Culhane data-system icon (near Governments, grey until selected) ── */
+    s += '<g id="culhane-data-icon" fill="none" stroke="#c9c6bf" stroke-width="1.8"' +
+         ' stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer">';
+    s += '<rect x="454" y="38" width="40" height="40" fill="transparent" stroke="none"/>';
+    s += '<svg x="458" y="42" width="32" height="32" viewBox="0 0 24 24">';
+    s += '<ellipse cx="12" cy="5" rx="9" ry="3"/>';
+    s += '<path d="M3 5v14a9 3 0 0018 0V5"/>';
+    s += '<path d="M3 12a9 3 0 0018 0"/>';
+    s += '</svg>';
+    s += '</g>';
+
+    /* ── Legend (bottom-left corner) ── */
+    s += '<g id="diagram-legend">';
+    s += '<rect x="44" y="514" width="218" height="50" rx="4"' +
+         ' fill="white" fill-opacity="0.92" stroke="#dde3ed" stroke-width="1"/>';
+    /* Row 1: person icon + label */
+    s += '<svg x="52" y="521" width="14" height="14" viewBox="0 0 24 24"' +
+         ' fill="none" stroke="#888680" stroke-width="2"' +
+         ' stroke-linecap="round" stroke-linejoin="round">';
+    s += '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>';
+    s += '<circle cx="12" cy="7" r="4"/>';
+    s += '</svg>';
+    s += '<text x="71" y="531" font-size="9.5" fill="#54534f"' +
+         ' font-family="\'DM Sans\',sans-serif">Individual / Member of the Public</text>';
+    /* Row 2: orange dashed arrow + label */
+    s += '<line x1="52" y1="549" x2="68" y2="549"' +
+         ' stroke="#f03d1f" stroke-width="2" stroke-dasharray="4,2.5"' +
+         ' marker-end="url(#tip-hover)"/>';
+    s += '<text x="74" y="553" font-size="9.5" fill="#54534f"' +
+         ' font-family="\'DM Sans\',sans-serif">Flow of Information Studied</text>';
+    s += '</g>';
+
+    s += '</svg>';
+    return s;
+  }
+
+  /* ── state ───────────────────────────────────── */
+  var selectedActor = null;
+  var currentPaper  = null;   // paper id currently previewed (hover)
+  var lockedPaper   = null;   // paper id locked by click
+  var lockedFaculty = null;   // faculty id locked by click
+  var arrowTimers   = {};     // pending marker-restore timers keyed by paper id
+
+  document.getElementById('svg-wrap').innerHTML = buildSVG();
+
+  /* ── helpers: reset arrow styles for a paper ─── */
+  function resetArrows(id) {
+    /* cancel any pending marker-restore timer for this paper */
+    if (arrowTimers[id]) {
+      arrowTimers[id].forEach(clearTimeout);
+      delete arrowTimers[id];
+    }
+    /* Gutmann: reset every arrow in the visualization */
+    var resetSelector = (id === 'gutmann') ? '.arrow-vis' : '[id^="av-' + id + '-"]';
+    document.querySelectorAll(resetSelector).forEach(function (vis) {
+      /* clear draw-on animation inline styles first */
+      vis.style.transition = '';
+      vis.style.strokeDasharray = '';
+      vis.style.strokeDashoffset = '';
+      vis.setAttribute('stroke', '#c9c6bf');
+      vis.setAttribute('stroke-width', '2.2');
+      vis.setAttribute('stroke-dasharray', '6,4');
+      vis.setAttribute('opacity', '0.45');
+      vis.setAttribute('marker-end', 'url(#tip)');
+      if (vis.hasAttribute('marker-start')) vis.setAttribute('marker-start', 'url(#tip-bi)');
+    });
+    if (id === 'culhane') {
+      var ci = document.getElementById('culhane-data-icon');
+      if (ci) ci.setAttribute('stroke', '#c9c6bf');
+    }
+  }
+
+  /* ── bio box ─────────────────────────────────── */
+  function showBio(id) {
+    var bio = BIOS[id];
+    if (!bio) return;
+    var name = '', school = '';
+    for (var k = 0; k < PAPERS.length; k++) {
+      if (PAPERS[k].id === id) { name = PAPERS[k].faculty; school = PAPERS[k].school; break; }
+    }
+    if (!name) {
+      for (var k = 0; k < FACULTY_ONLY.length; k++) {
+        if (FACULTY_ONLY[k].id === id) { name = FACULTY_ONLY[k].name; school = FACULTY_ONLY[k].school; break; }
+      }
+    }
+    document.getElementById('fb-name').textContent   = name;
+    document.getElementById('fb-school').textContent = school;
+    document.getElementById('fb-bio').innerHTML      = bio;
+    var photoEl = document.getElementById('fb-photo');
+    var photoSrc = PHOTOS[id];
+    if (photoSrc) {
+      photoEl.src = photoSrc;
+      photoEl.alt = name;
+      photoEl.classList.add('visible');
+    } else {
+      photoEl.src = '';
+      photoEl.classList.remove('visible');
+    }
+    /* website link */
+    var fbLink = document.getElementById('fb-website');
+    var siteUrl = WEBSITES[id];
+    if (siteUrl) {
+      fbLink.href = siteUrl;
+      fbLink.classList.add('visible');
+    } else {
+      fbLink.href = '#';
+      fbLink.classList.remove('visible');
+    }
+    document.getElementById('faculty-bio').classList.add('visible');
+  }
+
+  /* ── paper detail box ────────────────────────── */
+  function showDetail(id) {
+    var p = null;
+    for (var k = 0; k < PAPERS.length; k++) { if (PAPERS[k].id === id) { p = PAPERS[k]; break; } }
+    if (!p) return;
+    document.getElementById('pd-title').textContent = p.title || '';
+    var desc = document.getElementById('pd-desc');
+    desc.textContent = p.before + p.linkText + p.after;
+    var readBtn = document.getElementById('pd-read-btn');
+    if (p.link) { readBtn.href = p.link; readBtn.style.display = 'inline-block'; }
+    else { readBtn.style.display = 'none'; }
+    var pd = document.getElementById('paper-detail');
+    pd.classList.add('visible');
+  }
+
+  /* ── activate a paper (sticky — stays until replaced) ── */
+  function activatePaper(id) {
+    /* reset the previously active paper's arrows and card highlight */
+    if (currentPaper && currentPaper !== id) {
+      var old = document.getElementById('card-' + currentPaper);
+      if (old) old.classList.remove('active');
+      resetArrows(currentPaper);
+    }
+    currentPaper = id;
+    var card = document.getElementById('card-' + id);
+    if (card) card.classList.add('active');
+    /* cancel any stale timers from a previous activation of this paper */
+    if (arrowTimers[id]) { arrowTimers[id].forEach(clearTimeout); }
+    arrowTimers[id] = [];
+    /* Gutmann: light up every arrow in the visualization */
+    var arrowSelector = (id === 'gutmann') ? '.arrow-vis' : '[id^="av-' + id + '-"]';
+    document.querySelectorAll(arrowSelector).forEach(function (vis) {
+      var hasBidir = vis.hasAttribute('marker-start');
+      vis.setAttribute('stroke', '#f03d1f');
+      vis.setAttribute('stroke-width', '2.9');
+      vis.removeAttribute('stroke-dasharray');
+      vis.setAttribute('opacity', '1');
+      /* hide markers during draw — reveal after animation completes */
+      vis.removeAttribute('marker-end');
+      if (hasBidir) vis.removeAttribute('marker-start');
+      /* draw-on animation (Option 1) */
+      var len = vis.getTotalLength ? vis.getTotalLength() : 300;
+      vis.style.transition = 'none';
+      vis.style.strokeDasharray = len + ' ' + len;
+      vis.style.strokeDashoffset = len;
+      vis.getBoundingClientRect(); /* force reflow */
+      vis.style.transition = 'stroke-dashoffset 0.6s ease';
+      vis.style.strokeDashoffset = 0;
+      /* restore markers once line finishes drawing — track timer so it can be cancelled */
+      arrowTimers[id].push(setTimeout(function () {
+        vis.setAttribute('marker-end', 'url(#tip-hover)');
+        if (hasBidir) vis.setAttribute('marker-start', 'url(#tip-bi-hover)');
+      }, 620));
+    });
+    /* show/hide Culhane's data-system icon */
+    var ci = document.getElementById('culhane-data-icon');
+    if (ci) ci.setAttribute('stroke', id === 'culhane' ? '#f03d1f' : '#c9c6bf');
+    showDetail(id);
+    showBio(id);
+  }
+
+  /* ── activate a faculty-only bio (sticky) ─────── */
+  function activateFaculty(id) {
+    /* reset any active paper */
+    if (currentPaper) {
+      var old = document.getElementById('card-' + currentPaper);
+      if (old) old.classList.remove('active');
+      resetArrows(currentPaper);
+      document.getElementById('paper-detail').classList.remove('visible');
+      currentPaper = null;
+    }
+    showBio(id);
+  }
+
+  /* ── lock / restore helpers ──────────────────── */
+  function lockPaper(id) {
+    lockedPaper   = id;
+    lockedFaculty = null;
+    activatePaper(id);
+  }
+
+  function lockFaculty(id) {
+    lockedPaper   = null;
+    lockedFaculty = id;
+    activateFaculty(id);
+  }
+
+  function restoreLockedState() {
+    if (lockedPaper) {
+      activatePaper(lockedPaper);
+    } else if (lockedFaculty) {
+      /* reset any paper that was previewed */
+      if (currentPaper) {
+        var old = document.getElementById('card-' + currentPaper);
+        if (old) old.classList.remove('active');
+        resetArrows(currentPaper);
+        document.getElementById('paper-detail').classList.remove('visible');
+        currentPaper = null;
+      }
+      showBio(lockedFaculty);
+    } else {
+      /* nothing locked — clear preview */
+      if (currentPaper) {
+        var old = document.getElementById('card-' + currentPaper);
+        if (old) old.classList.remove('active');
+        resetArrows(currentPaper);
+        document.getElementById('paper-detail').classList.remove('visible');
+        currentPaper = null;
+      }
+    }
+  }
+
+  /* ── auto-cycle ──────────────────────────────── */
+  var autoCycling       = true;
+  var autoCycleInterval = null;
+  var autoCycleSeconds  = 10;
+
+  function updateCycleMsg(secs) {
+    var msg = document.getElementById('auto-cycle-msg');
+    if (msg) msg.textContent =
+      'Faculty auto-cycling every 10 seconds \u00b7 next in ' + secs + 's \u00b7 click any name to stop';
+  }
+
+  function stopAutoCycle() {
+    if (!autoCycling) return;
+    autoCycling = false;
+    if (autoCycleInterval) { clearInterval(autoCycleInterval); autoCycleInterval = null; }
+    var msg = document.getElementById('auto-cycle-msg');
+    if (msg) msg.classList.add('hidden');
+    var footer = document.getElementById('diagram-footer');
+    if (footer) footer.classList.add('hidden');
+  }
+
+  function pickRandomFaculty() {
+    var currentId = lockedPaper || lockedFaculty;
+    var candidates = CARD_ORDER.filter(function (id) { return id !== currentId; });
+    var id = candidates[Math.floor(Math.random() * candidates.length)];
+    var isPaper = PAPERS.some(function (p) { return p.id === id; });
+    if (isPaper) { lockPaper(id); } else { lockFaculty(id); }
+    autoCycleSeconds = 10;
+    updateCycleMsg(10);
+  }
+
+  function startAutoCycle() {
+    updateCycleMsg(10);
+    autoCycleInterval = setInterval(function () {
+      if (!autoCycling) return;
+      autoCycleSeconds--;
+      if (autoCycleSeconds <= 0) {
+        pickRandomFaculty();
+      } else {
+        updateCycleMsg(autoCycleSeconds);
+      }
+    }, 1000);
+  }
+
+  /* user-initiated lock — stops auto-cycle */
+  /* ── mobile: scroll bio/detail into view after a click ── */
+  function scrollToBio() {
+    if (window.innerWidth > 820) return; /* desktop: panels are always visible */
+    var target = document.getElementById('faculty-bio');
+    if (!target) return;
+    /* small delay so the bio has time to become visible before scrolling */
+    setTimeout(function () {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+
+  function userLockPaper(id)   { stopAutoCycle(); lockPaper(id);   scrollToBio(); }
+  function userLockFaculty(id) { stopAutoCycle(); lockFaculty(id); scrollToBio(); }
+
+  /* ── faculty role labels ─────────────────────── */
+  var ROLES = {
+    watts:          'Faculty Co-Director',
+    yoo:            'Faculty Co-Director',
+    lelkes:         'Faculty Advisor',
+    halljamieson:   'Faculty Advisor',
+    hopkins:        'Faculty Advisor',
+    patton:         'Faculty Advisor',
+    metaxa:         'Faculty Advisor',
+    gonzalezbailon: 'Faculty Advisor',
+    gutmann:        'Faculty Advisor'
+  };
+  function getRole(id) { return ROLES[id] || 'Affiliated Faculty'; }
+
+  /* ── render paper cards + faculty-only cards ──── */
+  function renderPaperCards() {
+    /* build lookup maps for fast access */
+    var paperMap = {};
+    PAPERS.forEach(function (p) { paperMap[p.id] = p; });
+    var facultyMap = {};
+    FACULTY_ONLY.forEach(function (f) { facultyMap[f.id] = f; });
+
+    var html = '';
+    CARD_ORDER.forEach(function (id) {
+      var p = paperMap[id];
+      if (p) {
+        html += '<div class="paper-card" id="card-' + p.id + '" data-paper="' + p.id + '">';
+        html += '<div class="card-name">' + esc(p.faculty) + '</div>';
+        html += '<div class="card-school">' + esc(getRole(p.id)) + '</div>';
+        html += '<div class="card-body">';
+        html += '<p class="card-desc">' + esc(p.before) +
+                (p.linkText ? '<a href="' + p.link + '" target="_blank" rel="noopener noreferrer">' + esc(p.linkText) + '</a>' : '') +
+                esc(p.after) + '</p>';
+        html += '</div></div>';
+      } else {
+        var f = facultyMap[id];
+        if (f) {
+          html += '<div class="paper-card faculty-card" id="fcard-' + f.id + '" data-faculty="' + f.id + '">';
+          html += '<div class="card-name">' + esc(f.name) + '</div>';
+          html += '<div class="card-school">' + esc(getRole(f.id)) + '</div>';
+          html += '</div>';
+        }
+      }
+    });
+
+    document.getElementById('paper-cards').innerHTML = html;
+
+    /* paper card listeners */
+    document.querySelectorAll('.paper-card[data-paper]').forEach(function (card) {
+      var pid = card.getAttribute('data-paper');
+      card.addEventListener('mouseenter', function () { activatePaper(pid); });
+      card.addEventListener('mouseleave', restoreLockedState);
+      card.addEventListener('click',      function () { userLockPaper(pid); });
+    });
+
+    /* faculty-only card listeners */
+    document.querySelectorAll('.faculty-card').forEach(function (card) {
+      var fid = card.getAttribute('data-faculty');
+      card.addEventListener('mouseenter', function () { activateFaculty(fid); });
+      card.addEventListener('mouseleave', restoreLockedState);
+      card.addEventListener('click',      function () { userLockFaculty(fid); });
+    });
+  }
+
+  /* ── render actor card ───────────────────────── */
+  function renderActorCard() {
+    var el   = document.getElementById('actor-card');
+    var hint = document.getElementById('panel-hint');
+    if (!selectedActor) {
+      el.classList.remove('visible');
+      el.innerHTML = '';
+      el.style.border = '';
+      hint.classList.remove('hidden');
+      return;
+    }
+    var actor = null;
+    for (var i = 0; i < ALL_ACTORS.length; i++) {
+      if (ALL_ACTORS[i].id === selectedActor) { actor = ALL_ACTORS[i]; break; }
+    }
+    if (!actor) return;
+    hint.classList.add('hidden');
+    el.style.borderLeft = '3px solid ' + actor.color;
+    el.style.borderTop = '';
+    el.style.borderRight = '';
+    el.style.borderBottom = '';
+    el.innerHTML =
+      '<div class="a-tag" style="color:' + actor.color + '">Actor</div>' +
+      '<div class="a-title" style="color:' + actor.color + '">' +
+        esc(actor.label.join(' ')) +
+      '</div>' +
+      '<p class="a-desc">' + esc(actor.desc) + '</p>' +
+      '<div class="a-faculty">' +
+        '<span class="a-faculty-label">Faculty studying this actor</span>' +
+        esc(actor.faculty) +
+      '</div>';
+    el.classList.add('visible');
+  }
+
+  /* ── dim / undim ─────────────────────────────── */
+  function updateDim() {
+    var nodes = document.querySelectorAll('.actor-g');
+    for (var i = 0; i < nodes.length; i++) {
+      var g  = nodes[i];
+      var id = g.getAttribute('data-actor');
+      if (selectedActor !== null && id !== selectedActor) {
+        if (id === 'public') {
+          var base = parseFloat(g.getAttribute('data-base-op') || '1');
+          g.setAttribute('opacity', (base * 0.2).toFixed(3));
+        } else {
+          g.setAttribute('opacity', '0.2');
+        }
+      } else {
+        if (id === 'public') {
+          g.setAttribute('opacity', g.getAttribute('data-base-op') || '1');
+        } else {
+          g.removeAttribute('opacity');
+        }
+      }
+    }
+  }
+
+  /* ── event listeners ─────────────────────────── */
+  var actorNodes = document.querySelectorAll('.actor-g');
+  for (var i = 0; i < actorNodes.length; i++) {
+    (function (g) {
+      g.addEventListener('click', function () {
+        var id = g.getAttribute('data-actor');
+        selectedActor = (selectedActor === id) ? null : id;
+        updateDim();
+        renderActorCard();
+      });
+    })(actorNodes[i]);
+  }
+
+  /* arrow listeners */
+  var arrowGroups = document.querySelectorAll('.arrow-g');
+  for (var j = 0; j < arrowGroups.length; j++) {
+    (function (g) {
+      var arrowId = g.getAttribute('data-arrow');
+      g.addEventListener('mouseenter', function () { stopAutoCycle(); activatePaper(arrowId); });
+      g.addEventListener('mouseleave', restoreLockedState);
+      g.addEventListener('click',      function () { userLockPaper(arrowId); });
+    })(arrowGroups[j]);
+  }
+
+  /* Culhane data-system icon listeners */
+  var culhaneIcon = document.getElementById('culhane-data-icon');
+  if (culhaneIcon) {
+    culhaneIcon.addEventListener('mouseenter', function () { stopAutoCycle(); activatePaper('culhane'); });
+    culhaneIcon.addEventListener('mouseleave', restoreLockedState);
+    culhaneIcon.addEventListener('click',      function () { userLockPaper('culhane'); });
+  }
+
+
+  /* ── init ────────────────────────────────────── */
+  renderPaperCards();
+  renderActorCard();
+  lockPaper('gutmann');
+  startAutoCycle();
+
+})();
+</script>
+
+<script>
+  /* Auto-resize: sends page height to parent so WordPress can resize the iframe accordingly */
+  function sendHeight() {
+    var height = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+    window.parent.postMessage({ frameHeight: height }, "*");
+  }
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+  var _heightObserver = new ResizeObserver(sendHeight);
+  _heightObserver.observe(document.body);
+</script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+/* =============================================================================
+   Atlassian Spacing Tokens — 8px base unit
+   Shared conventions with the Penn MEDIATED /about, /home, and /grants repos.
+   ============================================================================= */
+:root {
+  --space-025:   2px;
+  --space-050:   4px;
+  --space-075:   6px;
+  --space-100:   8px;
+  --space-150:  12px;
+  --space-200:  16px;
+  --space-250:  20px;
+  --space-300:  24px;
+  --space-400:  32px;
+  --space-600:  48px;
+  --space-800:  64px;
+
+  /* ── Brand colour tokens ── */
+  --c-dark:       #0d0d0c;
+  --c-accent:     #5533ee;   /* brand purple */
+  --c-red:        #f03d1f;   /* brand red/orange — the tool's single active/hover accent */
+  --c-gray:       #888680;
+  --c-gray-dark:  #54534f;   /* ~8:1 contrast on white */
+  --c-light-bg:   #f8f7f4;
+  --c-white:      #ffffff;
+  --c-border:     rgba(13,13,12,0.08);   /* shared hairline, matches every sibling repo */
+  --c-pale-red:   #fce4dc;               /* --c-red tinted ~12% onto white, matches /grants' --c-pale-orange */
+
+  /* ── Typography tokens ── */
+  --f-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --f-sans:  'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* ── Categorical colors for the network diagram's actor nodes ──
+     Rooted in the brand palette (purple + red) with earthy/teal
+     complements added only where a data-vis needs more distinct hues
+     than the two-color brand system provides. */
+  --actor-gov:    #4b2fc9;   /* Governments — deep brand purple */
+  --actor-media:  #1f6f4a;   /* Digital News — forest green */
+  --actor-social: #0f7d75;   /* Social Media — teal */
+  --actor-tv:     #b3261e;   /* Broadcast TV — muted brick red */
+  --actor-llm:    #7c3aed;   /* LLMs — violet */
+  --actor-elite:  #6b5b1f;   /* Elites — bronze/olive */
+  --actor-public: var(--c-gray);   /* General Public — muted neutral */
+  --neutral-line: #c9c6bf;  /* inactive arrow/icon neutral */
+}
+
+/* =============================================================================
+   Reset
+   ============================================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--c-light-bg);
+  font-family: var(--f-sans);
+  color: var(--c-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* ── PAGE SHELL ─────────────────────────────
+   Fixed-viewport 3-column app — matches the diagram tool as it's
+   actually embedded live (no footer content below it to scroll to). ── */
+#page { display: flex; flex-direction: column; height: 100vh; }
+
+/* ── HEADER ─────────────────────────────── */
+#hdr {
+  flex-shrink: 0;
+  background: var(--c-white);
+  border-bottom: 2px solid var(--c-dark);
+  padding: var(--space-300) var(--space-400) var(--space-250);
+  display: flex; align-items: flex-start;
+  gap: var(--space-400); justify-content: space-between;
+}
+#hdr-left { min-width: 0; flex: 1; }
+
+/* newsletter box */
+.newsletter-box { flex-shrink: 0; width: 228px; }
+.newsletter-box h3 {
+  font-family: var(--f-sans);
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.4px; color: var(--c-dark);
+  border-bottom: 2px solid var(--c-red);
+  padding-bottom: var(--space-100); margin-bottom: var(--space-150);
+}
+.newsletter-box p, .newsletter-box li {
+  font-family: var(--f-serif);
+  font-size: 14.5px; font-weight: 400;
+  color: var(--c-gray-dark); line-height: 1.75;
+}
+.newsletter-box a {
+  color: var(--c-dark); font-weight: 600;
+  border-bottom: 1px solid rgba(13,13,12,0.35);
+  transition: color 0.15s, border-color 0.15s;
+}
+.newsletter-box a:hover { color: var(--c-red); border-color: var(--c-red); }
+
+#hdr h1 {
+  font-family: var(--f-serif);
+  font-size: 26px; font-weight: 600; color: var(--c-dark);
+  line-height: 1.15; margin-bottom: var(--space-050);
+}
+#hdr p.hdr-desc {
+  font-family: var(--f-sans);
+  font-size: 15px; font-weight: 400;
+  color: var(--c-gray-dark); line-height: 1.6;
+  max-width: 820px;
+}
+
+/* ── MAIN BODY ───────────────────────────── */
+#main { flex: 1; min-height: 0; display: flex; overflow: hidden; }
+
+/* ── BOTTOM SPACER ───────────────────────────
+   A plain white strip along the very bottom edge so the app's content
+   doesn't sit flush against the browser/iframe edge. #main (flex: 1)
+   yields this space automatically, so the app still fills exactly
+   100vh with no scrolling introduced. ── */
+#page-bottom-spacer { flex-shrink: 0; height: var(--space-300); background: var(--c-white); }
+
+/* ── LEFT COLUMN (faculty bio + paper detail) ─────────── */
+#left-col {
+  width: 520px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  background: var(--c-light-bg);
+  border-right: 1px solid var(--c-border);
+  min-height: 0; overflow-y: auto;
+}
+
+/* ── SVG AREA ────────────────────────────── */
+#svg-area {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: var(--space-100) var(--space-075) var(--space-075);
+  background: var(--c-light-bg);
+}
+#svg-wrap { width: 100%; }
+/* Direct-child combinator only — the diagram nests small icon <svg>
+   elements many levels deep inside <g>s, and a plain descendant
+   selector here would stretch every one of those to 100% width too. */
+#svg-wrap > svg { display: block; width: 100%; height: auto; }
+
+#diagram-footer {
+  flex-shrink: 0;
+  margin-top: var(--space-075);
+  padding: var(--space-100) var(--space-150);
+  background: var(--c-pale-red);
+  border: 1px solid rgba(240,61,31,0.25);
+  border-left: 3px solid var(--c-red);
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+}
+#diagram-callout {
+  font-family: var(--f-serif);
+  font-size: 11px; font-weight: 400; font-style: italic;
+  color: var(--c-gray-dark); line-height: 1.6;
+}
+#auto-cycle-msg {
+  font-family: var(--f-sans);
+  font-size: 10px; color: var(--c-gray); letter-spacing: 0.3px;
+  margin-top: var(--space-050);
+}
+#auto-cycle-msg.hidden { display: none; }
+#diagram-footer.hidden { display: none; }
+
+/* ── RIGHT PANEL ─────────────────────────── */
+#panel {
+  width: 420px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  background: var(--c-white); border-left: 1px solid var(--c-border);
+  overflow: hidden;
+}
+
+/* actor detail card inside panel */
+#actor-card {
+  display: none; flex-shrink: 0;
+  padding: var(--space-150) var(--space-200) var(--space-150);
+  border-bottom: 1px solid var(--c-border);
+}
+#actor-card.visible { display: block; }
+.a-tag {
+  font-family: var(--f-sans);
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; margin-bottom: var(--space-050);
+}
+.a-title {
+  font-family: var(--f-serif);
+  font-size: 16px; font-weight: 600; margin-bottom: var(--space-100); line-height: 1.3;
+}
+.a-desc {
+  font-family: var(--f-sans);
+  font-size: 13px; font-weight: 400; color: var(--c-gray-dark);
+  line-height: 1.65; margin-bottom: var(--space-150);
+}
+.a-faculty {
+  font-family: var(--f-sans);
+  font-size: 12px; color: var(--c-gray-dark); line-height: 1.65;
+  border-top: 1px solid var(--c-border); padding-top: var(--space-100);
+}
+.a-faculty-label {
+  font-weight: 700; color: var(--c-dark); display: block;
+  margin-bottom: var(--space-025); text-transform: uppercase;
+  letter-spacing: 0.5px; font-size: 9px;
+}
+
+/* hint */
+#panel-hint {
+  flex-shrink: 0;
+  padding: var(--space-150) var(--space-200);
+  font-family: var(--f-serif);
+  font-size: 13px; font-weight: 400; font-style: italic;
+  color: var(--c-gray-dark); line-height: 1.6;
+  border-bottom: 1px solid var(--c-border);
+}
+#panel-hint.hidden { display: none; }
+
+/* paper cards list */
+#paper-cards {
+  flex: 1; overflow-y: auto; padding: var(--space-100) var(--space-150) var(--space-100);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-075);
+  align-content: stretch;
+}
+#paper-cards::-webkit-scrollbar { width: 3px; }
+#paper-cards::-webkit-scrollbar-thumb { background: rgba(13,13,12,0.15); }
+
+.arrow-g, .actor-g { cursor: pointer; touch-action: manipulation; }
+.paper-card { touch-action: manipulation; }
+#culhane-data-icon { touch-action: manipulation; }
+
+.paper-card {
+  border: 1.5px solid var(--c-border);
+  padding: var(--space-100) var(--space-150); cursor: pointer;
+  background: var(--c-white);
+  display: flex; flex-direction: column; justify-content: center;
+  transition: border-color 0.13s, background 0.13s;
+}
+.paper-card:hover { background: var(--c-light-bg); border-color: rgba(13,13,12,0.2); }
+.paper-card.active {
+  border-color: var(--c-red);
+  background: var(--c-pale-red);
+}
+.card-name {
+  font-family: var(--f-sans);
+  font-weight: 700; font-size: 12.5px; color: var(--c-dark);
+  line-height: 1.3; margin-bottom: var(--space-025);
+}
+.card-school {
+  font-family: var(--f-serif);
+  font-size: 10.5px; font-weight: 400; color: var(--c-gray);
+  font-style: italic; line-height: 1.35;
+}
+.card-body {
+  display: none; margin-top: var(--space-075); padding-top: var(--space-075);
+  border-top: 1px solid var(--c-border);
+}
+.paper-card.active .card-body { display: block; }
+.card-desc {
+  font-family: var(--f-serif);
+  font-size: 10px; font-weight: 400; color: var(--c-dark);
+  line-height: 1.7; margin: 0;
+}
+.card-desc a { color: var(--c-dark); font-weight: 700; border-bottom: 1px solid rgba(13,13,12,0.35); }
+
+/* card bodies are populated for accessibility but never expand inline —
+   detail surfaces in the left-column paper-detail box instead */
+.paper-card.active .card-body { display: none; }
+
+/* faculty bio box — top of left column */
+#faculty-bio {
+  flex-shrink: 0;
+  overflow: visible;
+  background: var(--c-white);
+  border-left: 3px solid var(--c-dark);
+  border-bottom: 1.5px solid var(--c-border);
+  border-top: none; border-right: none;
+  padding: var(--space-200) var(--space-250) var(--space-250);
+  box-shadow: 0 6px 22px rgba(13,13,12,0.06);
+  display: none;
+  flex-direction: column;
+}
+#faculty-bio.visible { display: flex; }
+#fb-header {
+  display: flex; align-items: flex-start;
+  gap: var(--space-150); margin-bottom: var(--space-150); flex-shrink: 0;
+}
+#fb-photo {
+  width: 72px; height: 72px;
+  object-fit: cover; object-position: center top;
+  flex-shrink: 0;
+  display: none;
+  border: 1px solid var(--c-border);
+  background: var(--c-light-bg);
+}
+#fb-photo.visible { display: block; }
+#fb-meta { flex: 1; min-width: 0; }
+#fb-name-row {
+  display: flex; align-items: center; gap: var(--space-150);
+  margin-bottom: var(--space-025);
+}
+#fb-name {
+  font-family: var(--f-serif);
+  font-weight: 600; font-size: 18px; color: var(--c-dark);
+  line-height: 1.3;
+}
+#fb-school {
+  font-family: var(--f-sans);
+  font-size: 12px; font-weight: 500; color: var(--c-gray);
+}
+#fb-bio {
+  font-family: var(--f-serif);
+  font-size: 14px; font-weight: 400; color: var(--c-gray-dark);
+  line-height: 1.75; margin: 0;
+}
+#fb-bio a { color: var(--c-dark); font-weight: 500; border-bottom: 1px solid rgba(13,13,12,0.3); transition: color 0.15s, border-color 0.15s; }
+#fb-bio a:hover { color: var(--c-red); border-color: var(--c-red); }
+#fb-website {
+  display: none; flex-shrink: 0;
+  font-family: var(--f-sans);
+  font-size: 11px; font-weight: 600;
+  color: var(--c-dark);
+  border-bottom: 1px solid rgba(13,13,12,0.35);
+  padding-bottom: 1px;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+#fb-website:hover { color: var(--c-red); border-color: var(--c-red); }
+#fb-website.visible { display: inline-block; }
+
+/* standalone paper detail box — bottom of left column */
+#paper-detail {
+  height: 40vh;
+  overflow-y: auto;
+  background: var(--c-white);
+  border-left: 3px solid var(--c-red);
+  border-top: 1.5px solid var(--c-border);
+  border-right: none;
+  border-bottom: none;
+  padding: var(--space-200) var(--space-250) var(--space-300);
+  box-shadow: 0 -6px 22px rgba(13,13,12,0.06);
+  display: none;
+}
+#paper-detail.visible { display: block; }
+#pd-title {
+  font-family: var(--f-serif);
+  font-size: 16px; font-weight: 600; font-style: italic;
+  color: var(--c-dark); line-height: 1.5;
+  margin-bottom: var(--space-150);
+  transition: font-size 0.3s ease, margin-bottom 0.3s ease;
+}
+#pd-desc {
+  font-family: var(--f-serif);
+  font-size: 15px; font-weight: 400; color: var(--c-gray-dark);
+  line-height: 1.75; margin: 0;
+  transition: font-size 0.3s ease, line-height 0.3s ease;
+}
+#pd-desc a { color: var(--c-dark); font-weight: 700; border-bottom: 1px solid rgba(13,13,12,0.35); }
+#pd-read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-075);
+  margin-top: var(--space-200);
+  font-family: var(--f-sans);
+  font-size: 13px; font-weight: 600;
+  color: var(--c-dark);
+  border-bottom: 1px solid rgba(13,13,12,0.35);
+  padding-bottom: 2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+#pd-read-btn:hover { color: var(--c-red); border-color: var(--c-red); }
+#pd-read-btn::after { content: '⟶'; }
+
+/* ── RESPONSIVE ─────────────────────────────── */
+@media (max-width: 820px) {
+  html, body { height: auto; overflow-x: hidden; overflow-y: auto; }
+  #page      { height: auto; min-height: 100vh; }
+
+  #hdr {
+    flex-direction: column;
+    padding: var(--space-200) var(--space-200) var(--space-150);
+    gap: var(--space-150);
+  }
+  #hdr h1          { font-size: 21px; }
+  #hdr p.hdr-desc  { font-size: 14px; }
+  .newsletter-box  {
+    width: 100%;
+    border-top: 1px solid var(--c-border);
+    padding-top: var(--space-150);
+  }
+  .newsletter-box p, .newsletter-box li { font-size: 13px; }
+
+  #main { flex-direction: column; overflow: visible; height: auto; }
+
+  #svg-area  { order: 1; width: 100%; flex: none; padding: var(--space-075) var(--space-050) var(--space-050);
+               align-items: flex-start; justify-content: flex-start; }
+  #panel     { order: 2; width: 100%; flex: none; height: auto;
+               border-left: none; border-top: 1px solid var(--c-border);
+               overflow: visible; }
+  #left-col  { order: 3; width: 100%; flex: none; border-right: none;
+               border-top: 1px solid var(--c-border);
+               overflow-y: visible; min-height: 0; }
+
+  #diagram-footer { max-width: 100%; }
+
+  #paper-cards {
+    grid-template-columns: 1fr 1fr;
+    flex: none; height: auto; overflow-y: visible;
+    padding: var(--space-100);
+  }
+
+  #paper-detail { height: auto; min-height: 0; }
+}
+
+@media (max-width: 540px) {
+  #hdr h1         { font-size: 19px; }
+  #hdr p.hdr-desc { font-size: 13px; }
+  .newsletter-box { display: none; }
+
+  .card-name   { font-size: 12px; }
+  #fb-bio      { font-size: 13px; }
+  #pd-desc     { font-size: 14px; }
+}
