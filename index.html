@@ -19,10 +19,6 @@
       <h1>Penn MEDIATED's Affiliated Faculty</h1>
       <p class="hdr-desc">Our 25 affiliated faculty are distinguished by their rigorous empirical and computational research that advances the collective understanding of the information ecosystem. Explore the visualization  to see research papers that are representative of how our faculty study the media organizations, technology platforms, governments, elites, and everyday people that make up the information ecosystem.</p>
     </div>
-    <div class="newsletter-box">
-      <h3>Center Newsletter</h3>
-      <p><a href="https://signup.e2ma.net/signup/2017639/1984707/" target="_blank" rel="noopener noreferrer">Subscribe</a> to our (occasional) newsletter for updates with the latest research, events, and announcements from the Center.</p>
-    </div>
   </div>
 
   <!-- MAIN -->
@@ -53,10 +49,6 @@
     <!-- DIAGRAM -->
     <div id="svg-area">
       <div id="svg-wrap"></div>
-      <div id="diagram-footer">
-        <div id="diagram-callout"></div>
-        <div id="auto-cycle-msg"></div>
-      </div>
     </div>
 
     <!-- RIGHT PANEL -->
@@ -930,20 +922,10 @@
   var autoCycleInterval = null;
   var autoCycleSeconds  = 10;
 
-  function updateCycleMsg(secs) {
-    var msg = document.getElementById('auto-cycle-msg');
-    if (msg) msg.textContent =
-      'Faculty auto-cycling every 10 seconds \u00b7 next in ' + secs + 's \u00b7 click any name to stop';
-  }
-
   function stopAutoCycle() {
     if (!autoCycling) return;
     autoCycling = false;
     if (autoCycleInterval) { clearInterval(autoCycleInterval); autoCycleInterval = null; }
-    var msg = document.getElementById('auto-cycle-msg');
-    if (msg) msg.classList.add('hidden');
-    var footer = document.getElementById('diagram-footer');
-    if (footer) footer.classList.add('hidden');
   }
 
   function pickRandomFaculty() {
@@ -953,18 +935,14 @@
     var isPaper = PAPERS.some(function (p) { return p.id === id; });
     if (isPaper) { lockPaper(id); } else { lockFaculty(id); }
     autoCycleSeconds = 10;
-    updateCycleMsg(10);
   }
 
   function startAutoCycle() {
-    updateCycleMsg(10);
     autoCycleInterval = setInterval(function () {
       if (!autoCycling) return;
       autoCycleSeconds--;
       if (autoCycleSeconds <= 0) {
         pickRandomFaculty();
-      } else {
-        updateCycleMsg(autoCycleSeconds);
       }
     }, 1000);
   }

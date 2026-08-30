@@ -78,30 +78,9 @@ img { max-width: 100%; height: auto; display: block; }
 }
 #hdr-left { min-width: 0; flex: 1; }
 
-/* newsletter box */
-.newsletter-box { flex-shrink: 0; width: 228px; }
-.newsletter-box h3 {
-  font-family: var(--f-sans);
-  font-size: 12px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 1.4px; color: var(--c-dark);
-  border-bottom: 2px solid var(--c-red);
-  padding-bottom: var(--space-100); margin-bottom: var(--space-150);
-}
-.newsletter-box p, .newsletter-box li {
-  font-family: var(--f-serif);
-  font-size: 14.5px; font-weight: 400;
-  color: var(--c-gray-dark); line-height: 1.75;
-}
-.newsletter-box a {
-  color: var(--c-dark); font-weight: 600;
-  border-bottom: 1px solid rgba(13,13,12,0.35);
-  transition: color 0.15s, border-color 0.15s;
-}
-.newsletter-box a:hover { color: var(--c-red); border-color: var(--c-red); }
-
 #hdr h1 {
   font-family: var(--f-serif);
-  font-size: 26px; font-weight: 600; color: var(--c-dark);
+  font-size: 26px; font-weight: 600; color: var(--c-accent);
   line-height: 1.15; margin-bottom: var(--space-050);
 }
 #hdr p.hdr-desc {
@@ -143,30 +122,6 @@ img { max-width: 100%; height: auto; display: block; }
    elements many levels deep inside <g>s, and a plain descendant
    selector here would stretch every one of those to 100% width too. */
 #svg-wrap > svg { display: block; width: 100%; height: auto; }
-
-#diagram-footer {
-  flex-shrink: 0;
-  margin-top: var(--space-075);
-  padding: var(--space-100) var(--space-150);
-  background: var(--c-pale-red);
-  border: 1px solid rgba(240,61,31,0.25);
-  border-left: 3px solid var(--c-red);
-  max-width: 560px;
-  width: 100%;
-  text-align: center;
-}
-#diagram-callout {
-  font-family: var(--f-serif);
-  font-size: 11px; font-weight: 400; font-style: italic;
-  color: var(--c-gray-dark); line-height: 1.6;
-}
-#auto-cycle-msg {
-  font-family: var(--f-sans);
-  font-size: 10px; color: var(--c-gray); letter-spacing: 0.3px;
-  margin-top: var(--space-050);
-}
-#auto-cycle-msg.hidden { display: none; }
-#diagram-footer.hidden { display: none; }
 
 /* ── RIGHT PANEL ─────────────────────────── */
 #panel {
@@ -386,12 +341,6 @@ img { max-width: 100%; height: auto; display: block; }
   }
   #hdr h1          { font-size: 21px; }
   #hdr p.hdr-desc  { font-size: 14px; }
-  .newsletter-box  {
-    width: 100%;
-    border-top: 1px solid var(--c-border);
-    padding-top: var(--space-150);
-  }
-  .newsletter-box p, .newsletter-box li { font-size: 13px; }
 
   #main { flex-direction: column; overflow: visible; height: auto; }
 
@@ -403,8 +352,6 @@ img { max-width: 100%; height: auto; display: block; }
   #left-col  { order: 3; width: 100%; flex: none; border-right: none;
                border-top: 1px solid var(--c-border);
                overflow-y: visible; min-height: 0; }
-
-  #diagram-footer { max-width: 100%; }
 
   #paper-cards {
     grid-template-columns: 1fr 1fr;
@@ -418,7 +365,6 @@ img { max-width: 100%; height: auto; display: block; }
 @media (max-width: 540px) {
   #hdr h1         { font-size: 19px; }
   #hdr p.hdr-desc { font-size: 13px; }
-  .newsletter-box { display: none; }
 
   .card-name   { font-size: 12px; }
   #fb-bio      { font-size: 13px; }
