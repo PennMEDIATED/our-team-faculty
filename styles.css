@@ -219,7 +219,8 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: 10px; font-weight: 400; color: var(--c-dark);
   line-height: 1.7; margin: 0;
 }
-.card-desc a { color: var(--c-dark); font-weight: 700; border-bottom: 1px solid rgba(13,13,12,0.35); }
+.card-desc a { color: var(--c-red); font-weight: 500; transition: opacity 0.15s; }
+.card-desc a:hover { opacity: 0.7; }
 
 /* card bodies are populated for accessibility but never expand inline —
    detail surfaces in the left-column paper-detail box instead */
@@ -271,8 +272,8 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: 14px; font-weight: 400; color: var(--c-gray-dark);
   line-height: 1.75; margin: 0;
 }
-#fb-bio a { color: var(--c-dark); font-weight: 500; border-bottom: 1px solid rgba(13,13,12,0.3); transition: color 0.15s, border-color 0.15s; }
-#fb-bio a:hover { color: var(--c-red); border-color: var(--c-red); }
+#fb-bio a { color: var(--c-red); font-weight: 500; transition: opacity 0.15s; }
+#fb-bio a:hover { opacity: 0.7; }
 #fb-website {
   display: none; flex-shrink: 0;
   font-family: var(--f-sans);
@@ -313,7 +314,8 @@ img { max-width: 100%; height: auto; display: block; }
   line-height: 1.75; margin: 0;
   transition: font-size 0.3s ease, line-height 0.3s ease;
 }
-#pd-desc a { color: var(--c-dark); font-weight: 700; border-bottom: 1px solid rgba(13,13,12,0.35); }
+#pd-desc a { color: var(--c-red); font-weight: 500; transition: opacity 0.15s; }
+#pd-desc a:hover { opacity: 0.7; }
 #pd-read-btn {
   display: inline-flex;
   align-items: center;
