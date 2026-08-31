@@ -46,7 +46,7 @@ All four repos are static HTML/CSS/JS built off the same design system. If you'r
 | Token | Hex | Use |
 |---|---|---|
 | `--c-dark` | `#0d0d0c` | Primary text, dark UI chrome |
-| `--c-accent` | `#5533ee` | Brand purple (reserved — not used on this page's UI chrome, only implicitly via `--actor-gov`) |
+| `--c-accent` | `#5533ee` | Brand purple — `#hdr h1` (page heading), plus implicitly via `--actor-gov` |
 | `--c-red` | `#f03d1f` | The tool's single active/hover accent |
 | `--c-gray` | `#888680` | Secondary/muted text; also `--actor-public` |
 | `--c-gray-dark` | `#54534f` | Body copy, bios, descriptions |
@@ -64,6 +64,10 @@ All four repos are static HTML/CSS/JS built off the same design system. If you'r
 Unlike `about`/`home`/`grants`, this page is a fixed-viewport 3-column app (`html, body { height: 100%; overflow: hidden; }`), not a scrolling editorial page — it has no nav bar, no footer, and no shared newsletter/supporters block, matching the actual page currently live at infodem.upenn.edu/faculty/ (which is this diagram, embedded via iframe, with WordPress supplying the surrounding chrome). Below 820px it becomes a normal scrolling page (diagram → faculty panel → bio/detail). Don't backport the fixed-viewport pattern to the other repos or the shared newsletter pattern to this one — they solve different problems.
 
 **One CSS gotcha if you touch `#svg-wrap`'s sizing rule:** it must be `#svg-wrap > svg` (direct child), never `#svg-wrap svg` (descendant). The diagram nests small icon `<svg>` elements many levels deep inside `<g>`s for each actor and crowd figure; a descendant selector stretches every one of those to `width: 100%` too, blowing the icons up to fill the whole diagram.
+
+### Hyperlinks in body copy
+
+Inline links inside flowing prose (bios, paper descriptions — not nav links, buttons, or whole-card/tile links) use one shared treatment sitewide: `color: var(--c-red)`, `font-weight: 500`, no underline, `opacity: 0.7` on hover, no color change. See `.card-desc a`, `#fb-bio a`, and `#pd-desc a` — same rule as `.event-card__caption a` (`events`), `.post-excerpt a` / `.modal-body a` (`blog`), and `.intro__body a` (`data`/`grants`). These three rules used dark text + weight 700 + a `border-bottom` underline until 2026-08-31 — a one-off treatment specific to this repo; don't reintroduce the border-bottom style anywhere, even for a new link context.
 
 ### Keeping the repos in sync
 
