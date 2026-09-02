@@ -63,6 +63,20 @@ All four repos are static HTML/CSS/JS built off the same design system. If you'r
 
 Unlike `about`/`home`/`grants`, this page is a fixed-viewport 3-column app (`html, body { height: 100%; overflow: hidden; }`), not a scrolling editorial page — it has no nav bar, no footer, and no shared newsletter/supporters block, matching the actual page currently live at infodem.upenn.edu/faculty/ (which is this diagram, embedded via iframe, with WordPress supplying the surrounding chrome). Below 820px it becomes a normal scrolling page (diagram → faculty panel → bio/detail). Don't backport the fixed-viewport pattern to the other repos or the shared newsletter pattern to this one — they solve different problems.
 
+### Typography
+
+This repo is a documented exception to the sitewide type scale.
+
+The `--fs-*`/`--lh-*` tokens are declared in `:root` and **only the page header uses them**: `#hdr h1` is `--fs-h3` (20-24px fluid) and `#hdr p.hdr-desc` is `--fs-small`. That one clamp replaced the two breakpoint step-downs the header used to carry.
+
+Everything below the header keeps its own sizes, deliberately:
+
+- **The app body is a fixed viewport.** `html, body { height: 100%; overflow: hidden }` and `#main` is `overflow: hidden` too, so type that grows has nowhere to go — it clips rather than pushing the page down. The dense card and panel sizes (down to 9px on `.a-tag` and `.a-faculty-label`) are calibrated to columns that cannot grow.
+- **The SVG diagram sizes its text with presentation attributes**, not CSS — `font-size="9.5"` and `font-size="11"` on `<text>` nodes placed at hardcoded coordinates. Those are user-space units inside a scaled `viewBox`, so they are not CSS pixels on screen and the 12px floor does not apply. Enlarging them would push labels out of the shapes they sit in.
+- **This page is a fork** of [`penn-mediated/Faculty-Research-Network`](https://github.com/penn-mediated/Faculty-Research-Network). Every divergence from upstream is listed above; a wholesale type rewrite would add a large one and make future merges painful.
+
+The two families (`--f-serif` / `--f-sans`) and the `--space-*` scale **do** apply here in full, as does the no-monospace rule.
+
 **One CSS gotcha if you touch `#svg-wrap`'s sizing rule:** it must be `#svg-wrap > svg` (direct child), never `#svg-wrap svg` (descendant). The diagram nests small icon `<svg>` elements many levels deep inside `<g>`s for each actor and crowd figure; a descendant selector stretches every one of those to `width: 100%` too, blowing the icons up to fill the whole diagram.
 
 ### Hyperlinks in body copy
