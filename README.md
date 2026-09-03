@@ -67,11 +67,14 @@ Unlike `about`/`home`/`grants`, this page is a fixed-viewport 3-column app (`htm
 
 This repo is a documented exception to the sitewide type scale.
 
-The `--fs-*`/`--lh-*` tokens are declared in `:root` and **only the page header uses them**: `#hdr h1` is `--fs-h3` (20-24px fluid) and `#hdr p.hdr-desc` is `--fs-small`. That one clamp replaced the two breakpoint step-downs the header used to carry.
+The `--fs-*`/`--lh-*` tokens are declared in `:root`. Two regions use them:
 
-Everything below the header keeps its own sizes, deliberately:
+- **The page header.** `#hdr h1` is `--fs-h3` (20-24px fluid) and `#hdr p.hdr-desc` is `--fs-small`. That one clamp replaced the two breakpoint step-downs the header used to carry.
+- **The left column's two detail boxes** (`#faculty-bio`, `#paper-detail`). Both scroll — `#left-col` is `overflow-y: auto` and `#paper-detail` has its own — so unlike the rest of the app body, type here has somewhere to go. Their headers stay EB Garamond (`#fb-name`, `#pd-title`, both `--fs-lede`/`--lh-title`); their running copy is DM Sans at `--fs-small`/`--lh-body` (`#fb-bio`, `#pd-desc`), which is the sitewide serif-for-headings, sans-for-prose rule. `#fb-school` and `#fb-website` moved from 12px/11px to `--fs-micro`, clearing the 12px floor. The narrow-viewport `#fb-bio`/`#pd-desc` step-downs were dropped — `--fs-small` is already that size.
 
-- **The app body is a fixed viewport.** `html, body { height: 100%; overflow: hidden }` and `#main` is `overflow: hidden` too, so type that grows has nowhere to go — it clips rather than pushing the page down. The dense card and panel sizes (down to 9px on `.a-tag` and `.a-faculty-label`) are calibrated to columns that cannot grow.
+Everything else below the header keeps its own sizes, deliberately:
+
+- **The app body is a fixed viewport.** `html, body { height: 100%; overflow: hidden }` and `#main` is `overflow: hidden` too, so type that grows has nowhere to go — it clips rather than pushing the page down. The dense card and panel sizes (down to 9px on `.a-tag` and `.a-faculty-label`) are calibrated to columns that cannot grow. The left column is the exception, and is on the scale — see above.
 - **The SVG diagram sizes its text with presentation attributes**, not CSS — `font-size="9.5"` and `font-size="11"` on `<text>` nodes placed at hardcoded coordinates. Those are user-space units inside a scaled `viewBox`, so they are not CSS pixels on screen and the 12px floor does not apply. Enlarging them would push labels out of the shapes they sit in.
 - **This page is a fork** of [`penn-mediated/Faculty-Research-Network`](https://github.com/penn-mediated/Faculty-Research-Network). Every divergence from upstream is listed above; a wholesale type rewrite would add a large one and make future merges painful.
 

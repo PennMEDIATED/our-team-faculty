@@ -33,9 +33,11 @@
   --f-sans:  'DM Sans', system-ui, -apple-system, sans-serif;
 
   /* ── Type scale (sitewide — see README) ──
-     Only the page header uses this scale. The app body below it is a
-     fixed-viewport layout whose dense cards and SVG labels are sized
-     independently — see the README's "A note on this page's layout". */
+     The page header and the left column's two scrolling detail boxes
+     (#faculty-bio, #paper-detail) use this scale. The rest of the app
+     body is a fixed-viewport layout whose dense cards and SVG labels
+     are sized independently — see the README's "A note on this page's
+     layout". */
   --fs-display:     clamp(36px, 22.7px + 3.70vw, 76px);
   --fs-h1:          clamp(36px, 29.3px + 1.85vw, 56px);
   --fs-h2:          clamp(26px, 21.3px + 1.30vw, 40px);
@@ -280,26 +282,31 @@ img { max-width: 100%; height: auto; display: block; }
   display: flex; align-items: center; gap: var(--space-150);
   margin-bottom: var(--space-025);
 }
+/* Box header — stays EB Garamond, on the sitewide scale. */
 #fb-name {
   font-family: var(--f-serif);
-  font-weight: 600; font-size: 18px; color: var(--c-dark);
-  line-height: 1.3;
+  font-weight: 600; font-size: var(--fs-lede); color: var(--c-dark);
+  line-height: var(--lh-title);
 }
 #fb-school {
   font-family: var(--f-sans);
-  font-size: 12px; font-weight: 500; color: var(--c-gray);
+  font-size: var(--fs-micro); font-weight: 500; color: var(--c-gray);
+  line-height: var(--lh-title);
 }
+/* Body copy — DM Sans at --fs-small/--lh-body, matching #pd-desc below
+   and the rest of the site. (It was EB Garamond at a hand-set 14px/1.75;
+   running prose is sans sitewide, serif is for headings.) */
 #fb-bio {
-  font-family: var(--f-serif);
-  font-size: 14px; font-weight: 400; color: var(--c-dark);
-  line-height: 1.75; margin: 0;
+  font-family: var(--f-sans);
+  font-size: var(--fs-small); font-weight: 400; color: var(--c-dark);
+  line-height: var(--lh-body); margin: 0;
 }
 #fb-bio a { color: var(--c-red); font-weight: 500; transition: opacity 0.15s; }
 #fb-bio a:hover { opacity: 0.7; }
 #fb-website {
   display: none; flex-shrink: 0;
   font-family: var(--f-sans);
-  font-size: 11px; font-weight: 600;
+  font-size: var(--fs-micro); font-weight: 600;
   color: var(--c-dark);
   border-bottom: 1px solid rgba(13,13,12,0.35);
   padding-bottom: 1px;
@@ -323,18 +330,20 @@ img { max-width: 100%; height: auto; display: block; }
   display: none;
 }
 #paper-detail.visible { display: block; }
+/* Box header — stays EB Garamond, on the sitewide scale, matching
+   #fb-name in the bio box above it. */
 #pd-title {
   font-family: var(--f-serif);
-  font-size: 16px; font-weight: 600;
-  color: var(--c-dark); line-height: 1.5;
+  font-size: var(--fs-lede); font-weight: 600;
+  color: var(--c-dark); line-height: var(--lh-title);
   margin-bottom: var(--space-150);
-  transition: font-size 0.3s ease, margin-bottom 0.3s ease;
+  transition: margin-bottom 0.3s ease;
 }
+/* Body copy — DM Sans at --fs-small/--lh-body, matching #fb-bio. */
 #pd-desc {
-  font-family: var(--f-serif);
-  font-size: 15px; font-weight: 400; color: var(--c-gray-dark);
-  line-height: 1.75; margin: 0;
-  transition: font-size 0.3s ease, line-height 0.3s ease;
+  font-family: var(--f-sans);
+  font-size: var(--fs-small); font-weight: 400; color: var(--c-gray-dark);
+  line-height: var(--lh-body); margin: 0;
 }
 #pd-desc a { color: var(--c-red); font-weight: 500; transition: opacity 0.15s; }
 #pd-desc a:hover { opacity: 0.7; }
@@ -344,7 +353,7 @@ img { max-width: 100%; height: auto; display: block; }
   gap: var(--space-075);
   margin-top: var(--space-200);
   font-family: var(--f-sans);
-  font-size: 13px; font-weight: 600;
+  font-size: var(--fs-small); font-weight: 600;
   color: var(--c-dark);
   border-bottom: 1px solid rgba(13,13,12,0.35);
   padding-bottom: 2px;
@@ -387,6 +396,7 @@ img { max-width: 100%; height: auto; display: block; }
 @media (max-width: 540px) {
 
   .card-name   { font-size: 12px; }
-  #fb-bio      { font-size: 13px; }
-  #pd-desc     { font-size: 14px; }
+  /* #fb-bio / #pd-desc had 13px / 14px overrides here; both now sit on
+     --fs-small (14px), which is already the narrow-viewport size and
+     above the 12px floor, so there is nothing left to step down. */
 }
