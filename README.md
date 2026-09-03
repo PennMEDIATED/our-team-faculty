@@ -55,7 +55,7 @@ All four repos are static HTML/CSS/JS built off the same design system. If you'r
 | `--c-border` | `rgba(13,13,12,0.08)` | Shared hairline, matches every sibling repo |
 | `--c-pale-red` | `#fce4dc` | Active-card and callout-box tint — same value as `grants`' `--c-pale-orange` |
 
-**Type:** `--f-serif` (`'EB Garamond', Georgia, 'Times New Roman', serif`) for headings, bios, and paper titles; `--f-sans` (`'DM Sans', system-ui, -apple-system, sans-serif`) for everything else.
+**Type:** two families, no third — and the split is by what the text *is*, not by heading level. `--f-serif` (`'EB Garamond', Georgia, 'Times New Roman', serif`) takes page titles and the titles of works or names of people; `--f-sans` (`'DM Sans', system-ui, -apple-system, sans-serif`) takes section headings, card and UI labels, running prose, metadata and controls. **A section heading is not serif.** Here that means `#fb-name` (a person) and `#pd-title` (a paper — a work) are EB Garamond, while the bio and abstract copy beneath them is DM Sans.
 
 **Actor palette:** six categorical colors rooted in the brand's purple/red pair plus enough distinct hues for a data-vis with more categories than the two-color brand system provides on its own — see `--actor-*` tokens. If a new actor category is ever added, pick a hue that's visually distinct from all existing ones at a glance, not just numerically different.
 
@@ -70,7 +70,7 @@ This repo is a documented exception to the sitewide type scale.
 The `--fs-*`/`--lh-*` tokens are declared in `:root`. Two regions use them:
 
 - **The page header.** `#hdr h1` is `--fs-h3` (20-24px fluid) and `#hdr p.hdr-desc` is `--fs-small`. That one clamp replaced the two breakpoint step-downs the header used to carry.
-- **The left column's two detail boxes** (`#faculty-bio`, `#paper-detail`). Both scroll — `#left-col` is `overflow-y: auto` and `#paper-detail` has its own — so unlike the rest of the app body, type here has somewhere to go. Their headers stay EB Garamond (`#fb-name`, `#pd-title`, both `--fs-lede`/`--lh-title`); their running copy is DM Sans at `--fs-small`/`--lh-body` (`#fb-bio`, `#pd-desc`), which is the sitewide serif-for-headings, sans-for-prose rule. `#fb-school` and `#fb-website` moved from 12px/11px to `--fs-micro`, clearing the 12px floor. The narrow-viewport `#fb-bio`/`#pd-desc` step-downs were dropped — `--fs-small` is already that size.
+- **The left column's two detail boxes** (`#faculty-bio`, `#paper-detail`). Both scroll — `#left-col` is `overflow-y: auto` and `#paper-detail` has its own — so unlike the rest of the app body, type here has somewhere to go. Their headers stay EB Garamond (`#fb-name`, `#pd-title`, both `--fs-lede`/`--lh-title`); their running copy is DM Sans at `--fs-small`/`--lh-body` (`#fb-bio`, `#pd-desc`), which is the sitewide rule: serif names a work or a person, sans carries the prose. `#fb-school` and `#fb-website` moved from 12px/11px to `--fs-micro`, clearing the 12px floor. The narrow-viewport `#fb-bio`/`#pd-desc` step-downs were dropped — `--fs-small` is already that size.
 
 Everything else below the header keeps its own sizes, deliberately:
 
