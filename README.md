@@ -82,6 +82,23 @@ The two families (`--f-serif` / `--f-sans`) and the `--space-*` scale **do** app
 
 **One CSS gotcha if you touch `#svg-wrap`'s sizing rule:** it must be `#svg-wrap > svg` (direct child), never `#svg-wrap svg` (descendant). The diagram nests small icon `<svg>` elements many levels deep inside `<g>`s for each actor and crowd figure; a descendant selector stretches every one of those to `width: 100%` too, blowing the icons up to fill the whole diagram.
 
+## Embedding this page
+
+WordPress renders the real site; this repo is the source. The launch plan is direct-to-disk deployment, which needs no iframe — but iframe embedding still works and is the documented fallback, so keep this snippet accurate if you rename the repo or change its Pages URL.
+
+Paste into a WordPress Code block (or Divi Code module) as one line:
+
+```html
+<iframe id="pm-our-team-faculty" src="https://pennmediated.github.io/our-team-faculty/" title="Affiliated Faculty — Penn MEDIATED" loading="lazy" style="width:100%;height:900px;border:0;display:block"></iframe><script>(function(){var f=document.getElementById('pm-our-team-faculty');window.addEventListener('message',function(e){if(e.source!==f.contentWindow)return;var d=e.data||{},h=d.frameHeight||(d.type==='partners-page-resize'?d.height:0);if(h)f.style.height=h+'px';});})();</script>
+```
+
+This page is a fixed-viewport app (`html, body { height: 100%; overflow: hidden }`), so it fills whatever height the iframe gives it rather than growing to fit. The height in the snippet is a design decision, not a measurement — change it and the page adapts.
+
+The `height` in the snippet is only the starting value. Every Penn MEDIATED page posts its real height to the parent as `{{ frameHeight: <int> }}` — on load, on resize, once webfonts settle, and on any `ResizeObserver` change, so reveal animations, expanding cards and `<details>` toggles all resize the frame. The listener in the snippet applies it. `grants-rfp` also emits an older `{{ type: 'partners-page-resize', height }}` message; the snippet accepts both.
+
+The page checks `window.self === window.top` before posting, so opening it directly does nothing. If you add a new page repo, copy the script from the bottom of this `index.html` so it behaves the same way.
+
+
 ## Images and video
 
 This applies to every image, GIF and video added to any Penn MEDIATED repo. It is written to be followed directly — by a person or by a Claude session — without further instruction.
