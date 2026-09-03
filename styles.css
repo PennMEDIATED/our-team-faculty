@@ -21,6 +21,11 @@
   --c-dark:       #0d0d0c;
   --c-accent:     #5533ee;   /* brand purple */
   --c-red:        #f03d1f;   /* brand red/orange — the tool's single active/hover accent */
+  /* Deeper red-orange — the gradient's closing stop, promoted to a token
+     of its own. Link text on a white/light ground uses this: --c-red
+     only reaches ~3.9:1 against white, this clears 4.5:1. --c-red stays
+     the brand accent for fills, borders, icons, tags and labels. */
+  --c-red-dark:   #df3611;
   --c-gray:       #888680;
   --c-gray-dark:  #54534f;   /* ~8:1 contrast on white */
   --c-light-bg:   #f8f7f4;
@@ -243,7 +248,7 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: 10px; font-weight: 400; color: var(--c-dark);
   line-height: 1.7; margin: 0;
 }
-.card-desc a { color: var(--c-red); font-weight: 500; transition: opacity 0.15s; }
+.card-desc a { color: var(--c-red-dark); font-weight: 500; transition: opacity 0.15s; }
 .card-desc a:hover { opacity: 0.7; }
 
 /* card bodies are populated for accessibility but never expand inline —
@@ -301,7 +306,7 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: var(--fs-small); font-weight: 400; color: var(--c-dark);
   line-height: var(--lh-body); margin: 0;
 }
-#fb-bio a { color: var(--c-red); font-weight: 500; transition: opacity 0.15s; }
+#fb-bio a { color: var(--c-red-dark); font-weight: 500; transition: opacity 0.15s; }
 #fb-bio a:hover { opacity: 0.7; }
 #fb-website {
   display: none; flex-shrink: 0;
@@ -313,7 +318,7 @@ img { max-width: 100%; height: auto; display: block; }
   transition: color 0.15s, border-color 0.15s;
   white-space: nowrap;
 }
-#fb-website:hover { color: var(--c-red); border-color: var(--c-red); }
+#fb-website:hover { color: var(--c-red-dark); border-color: var(--c-red-dark); }
 #fb-website.visible { display: inline-block; }
 
 /* standalone paper detail box — bottom of left column */
@@ -345,7 +350,7 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: var(--fs-small); font-weight: 400; color: var(--c-gray-dark);
   line-height: var(--lh-body); margin: 0;
 }
-#pd-desc a { color: var(--c-red); font-weight: 500; transition: opacity 0.15s; }
+#pd-desc a { color: var(--c-red-dark); font-weight: 500; transition: opacity 0.15s; }
 #pd-desc a:hover { opacity: 0.7; }
 #pd-read-btn {
   display: inline-flex;
@@ -359,7 +364,7 @@ img { max-width: 100%; height: auto; display: block; }
   padding-bottom: 2px;
   transition: color 0.15s, border-color 0.15s;
 }
-#pd-read-btn:hover { color: var(--c-red); border-color: var(--c-red); }
+#pd-read-btn:hover { color: var(--c-red-dark); border-color: var(--c-red-dark); }
 #pd-read-btn::after { content: '⟶'; }
 
 /* ── RESPONSIVE ─────────────────────────────── */
