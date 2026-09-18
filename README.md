@@ -109,7 +109,7 @@ Divi caches its compiled CSS to a static file, so clear that cache (Divi → The
 On Divi 4 this was all different: a **Fullwidth Section** holding a **Fullwidth Code** module, with separate CSS ID and CSS Class fields on the Advanced tab. Divi 5 removed the section-type chooser (the add-section button offers flex and grid layout options now) and folded ID and class into Advanced → **Attributes**, so ignore Divi 4 tutorials on both points. The embed snippet itself:
 
 ```html
-<iframe id="pm-our-team-faculty" src="https://pennmediated.github.io/our-team-faculty/" title="Affiliated Faculty — Penn MEDIATED" loading="lazy" style="width:100%;height:900px;border:0;display:block"></iframe><script>(function(){var f=document.getElementById('pm-our-team-faculty');window.addEventListener('message',function(e){if(e.source!==f.contentWindow)return;var d=e.data||{},h=d.frameHeight||(d.type==='partners-page-resize'?d.height:0);if(h)f.style.height=h+'px';});})();</script>
+<iframe id="pm-team-faculty" src="https://pennmediated.github.io/team-faculty/" title="Affiliated Faculty — Penn MEDIATED" loading="lazy" style="width:100%;height:900px;border:0;display:block"></iframe><script>(function(){var f=document.getElementById('pm-team-faculty');window.addEventListener('message',function(e){if(e.source!==f.contentWindow)return;var d=e.data||{},h=d.frameHeight||(d.type==='partners-page-resize'?d.height:0);if(h)f.style.height=h+'px';});})();</script>
 ```
 
 This page is a fixed-viewport app (`html, body { height: 100%; overflow: hidden }`), so it fills whatever height the iframe gives it rather than growing to fit. The height in the snippet is a design decision, not a measurement — change it and the page adapts.
